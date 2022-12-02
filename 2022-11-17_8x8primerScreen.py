@@ -44,7 +44,6 @@
 
 
 from opentrons import protocol_api
-from opentrons import types
 
 metadata = {
     'apiLevel': '2.13',
@@ -83,12 +82,13 @@ def run(protocol: protocol_api.ProtocolContext):
     reservoir = protocol.load_labware('opentrons_24_tuberack_eppendorf_1.5ml_safelock_snapcap', 5)
     plate = protocol.load_labware('appliedbiosystemsmicroamp_384_wellplate_40ul', 2)
 
+    '''
     # because 5mL tubes aren't defined by Opentrons, we have to load a custom definition here
     with open('usascientific_15_tuberack_5000ul.json') as labware_file:
         labware_def = json.load(labware_file)
         mastermixes = protocol.load_labware_from_definition(labware_def, 1)
-        
-    #mastermixes = protocol.load_labware('usascientific_15_tuberack_5000ul', 1)
+    '''
+    mastermixes = protocol.load_labware('usascientific_15_tuberack_5000ul', 1)
 
     # pipette initialization/setup
     p20 = protocol.load_instrument('p20_single_gen2', 'right', tip_racks=[p20tips])
