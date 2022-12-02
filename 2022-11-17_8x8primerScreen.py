@@ -87,7 +87,7 @@ def run(protocol: protocol_api.ProtocolContext):
         labware_def = json.load(labware_file)
         mastermixes = protocol.load_labware_from_definition(labware_def, 1)
     '''
-    mastermixes = protocol.load_labware('usascientific_15_tuberack_5000ul.json', 1)
+    mastermixes = protocol.load_labware('usascientific_15_tuberack_5000ul', 1)
 
     # pipette initialization/setup
     p20 = protocol.load_instrument('p20_single_gen2', 'right', tip_racks=[p20tips])
