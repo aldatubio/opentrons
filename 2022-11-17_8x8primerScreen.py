@@ -167,7 +167,9 @@ def run(protocol: protocol_api.ProtocolContext):
             touch_tip = True
         )
 
-
+        
+    protocol.pause('Primer plating complete. Tap or spin down plate to mix, then add negative control master mix tube to rack.')
+    
     # In[ ]:
 
 
@@ -197,7 +199,8 @@ def run(protocol: protocol_api.ProtocolContext):
         p300.blow_out(mastermixes['C5'])                                                      # blow out into source well
     p300.drop_tip()
 
-
+    protocol.pause('NTC master mix plating complete. Add tube of master mix with template to rack.')
+    
     # In[ ]:
 
 
