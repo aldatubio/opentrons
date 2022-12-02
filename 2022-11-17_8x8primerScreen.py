@@ -44,6 +44,8 @@
 
 
 from opentrons import protocol_api
+from opentrons import types
+
 metadata = {
     'apiLevel': '2.13',
     'protocolName': '8x8 Primer Screen',
