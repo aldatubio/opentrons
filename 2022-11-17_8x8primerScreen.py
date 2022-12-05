@@ -171,8 +171,12 @@ def run(protocol: protocol_api.ProtocolContext):
             touch_tip = True
         )
 
-        
-    protocol.pause('Primer plating complete. Tap or spin down plate to mix, then add negative control master mix tube to rack.')
+    # Opentrons says pause() method can take a string argument and display this as a message to the user,
+    # but in my experience this does not actually happen (string does not even show up in run log.)
+    # Instead, use (deprecated?) comment() method to display text.
+    # Comment text will show up in run log portion of app screen; can be somewhat hard to find.
+    protocol.pause()
+    protocol.comment('Primer plating complete. Tap or spin down plate to mix, then add negative control master mix tube to rack.')
     
     # In[ ]:
 
@@ -203,7 +207,8 @@ def run(protocol: protocol_api.ProtocolContext):
         p300.blow_out(mastermixes['C5'])                                                      # blow out into source well
     p300.drop_tip()
 
-    protocol.pause('NTC master mix plating complete. Add tube of master mix with template to rack.')
+    protocol.pause()
+    protocol.comment('NTC master mix plating complete. Add tube of master mix with template to rack.')
     
     # In[ ]:
 
