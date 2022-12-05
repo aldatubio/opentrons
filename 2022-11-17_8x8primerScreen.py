@@ -49,12 +49,10 @@ metadata = {
     'apiLevel': '2.13',
     'protocolName': '8x8 Primer Screen (updated 2022-12-05)',
     'author': 'OP13 LL',
-    'description': '''Test 64 different forward-reverse primer pairs for sensitivity (ability to amplify target template) and specificity (inability to amplify NTC).\n
-                       Duration: 55 min\n
-                       LIQUID SETUP:\n
-                       1.5mL snap cap tubes: tubes A1-4, B1-4 = 13X forward primers (80µL each), tubes C1-4, D1-4 = 13X reverse primers (80 µL each).\n
-                       5mL screw cap tubes: tube A5 = master mix with target template (3.6mL), tube C5 = negative control master mix (3.6mL).
-    '''
+    'description': '''LIQUID SETUP:
+                        1.5mL tubes: tubes A1-4, B1-4 = forward primers (80µL each); tubes C1-4, D1-4 = reverse primers (80µL each).
+                        5mL tubes: tube A5 = master mix with target template (3.6mL), tube C5 = negative control master mix (3.6mL).
+                        '''
 }
 
 def run(protocol: protocol_api.ProtocolContext):
