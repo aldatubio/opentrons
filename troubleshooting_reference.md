@@ -10,6 +10,7 @@ See also: [Opentrons API Version 2 Reference](https://docs.opentrons.com/v2/new_
 - [Decreasing tip usage](#robot-is-using-more-tips-than-necessary)
 - [Displaying in-app messages and adding pause steps](#displaying-in-app-messages-and-adding-pause-steps)
 - [Help with building block commands](#help-with-building-block-commands)
+- [Copy-and-paste troubleshooting scripts](#copy-and-paste-troubleshooting-scripts)
 
 ## Liquid handling
 ### Viscous liquids
