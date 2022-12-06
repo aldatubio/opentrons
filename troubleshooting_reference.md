@@ -4,13 +4,16 @@ This guide contains code snippets and script references for problems we've encou
 See also: [Opentrons API Version 2 Reference](https://docs.opentrons.com/v2/new_protocol_api.html)
 
 **Contents**
-- [Viscous liquid handling](#viscous-liquid-handling)
+- [Liquid handling](#liquid-handling)
+  - [Viscous liquids](#viscous-liquids)
+  - [Robot skips wells](#robot-is-skipping-wells-when-dispensing)
 - [Help with building block commands](#help-with-building-block-commands)
 
-## Viscous liquid handling
-**Summary:** Use building block commands to access additional pipetting parameters.
+## Liquid handling
+### Viscous liquids
+Generally, issues with viscous liquids can be solved by using building block commands to access additional pipetting parameters.
 
-### Liquid isn't dispensing completely, or air bubbles are present when aspirating
+#### Liquid isn't dispensing completely, or air bubbles are present when aspirating
 `InstrumentContext.aspirate()` and `InstrumentContext.dispense()` can take an additional argument that specifies a rate multiplier. See the bottom of Opentrons API v2's [Pipettes reference page](https://docs.opentrons.com/v2/new_pipette.html) for default speeds.
 
 ```python
@@ -24,7 +27,7 @@ p300.dispense(100, rack['A2'], 0.7)
 
 p300.drop_tip()
 ```
-### Large droplets accumulating on pipette tip after aspirating
+#### Large droplets accumulating on pipette tip after aspirating
 `InstrumentContext.touch_tip()` can take a vertical offset argument (in mm) - performing touch tip deeper within the source tube (negative offset value) can help shake off any particularly stubborn droplets. If this still doesn't work, try wrapping `InstrumentContext.touch_tip()` in a loop to perform the action several times in a row.
 ```python
 p300.pick_up_tip()
@@ -37,6 +40,9 @@ for i in range(3):
 p300.dispense(100, rack['A2'])
 p300.drop_tip()
 ```
+
+### Robot is skipping wells when dispensing
+Make sure the volume being dispensed is reasonable. Disregarding Opentrons recommendations, the P300 seems to be able to pipette as little as 10uL at a time; when pipetting 5uL, liquid would randomly fail to be dispensed into some wells. Adjust pipetting steps and reagent concentrations to avoid pipetting volumes that are too small.
 
 ## Help with building block commands
 When using building block commands, every step of liquid handling must be specified individually. Opentrons will throw an error if there is no tip attached and it is told to aspirate, or if there is still a tip attached and it is told to pick up a new tip.
