@@ -2,7 +2,7 @@
 # coding: utf-8
 
 # # 8x8 Primer Screen
-# **Updated 2022-11-21** <br>
+# **Updated 2022-12-05** <br>
 # **Author: OP13 LL**
 # 
 # **Purpose:** Test 64 different forward-reverse primer pairs for sensitivity (ability to amplify target template) and specificity (inability to amplify NTC). <br>
