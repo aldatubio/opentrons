@@ -2,7 +2,7 @@
 # coding: utf-8
 
 # # 8x8 Primer Screen
-# **Updated 2022-12-05** <br>
+# **Updated 2022-12-12** <br>
 # **Author: OP13 LL**
 # 
 # **Purpose:** Test 64 different forward-reverse primer pairs for sensitivity (ability to amplify target template) and specificity (inability to amplify NTC). <br>
@@ -35,8 +35,8 @@
 #  - **2:** Applied Biosystems 384-well MicroAmp plate
 #  - **4:** 96-count 300µL tip rack (protocol uses 2 tips)
 #  - **5:** 24-count 1.5mL snap cap tube rack, with tubes as follows:
-#      - tubes A1-4, B1-4: 13X forward primers (80µL each)
-#      - tubes C1-4, D1-4: 13X reverse primers (80µL each)
+#      - tubes A1-4, B1-4: 13X forward primers (100µL each)
+#      - tubes C1-4, D1-4: 13X reverse primers (100µL each)
 #  - **6:** 96-count 20µL tip rack (protocol uses 16 tips)
 # 
 # 
@@ -50,7 +50,7 @@ metadata = {
     'protocolName': '8x8 Primer Screen (updated 2022-12-05)',
     'author': 'OP13 LL',
     'description': '''LIQUID SETUP:
-                        1.5mL tubes: tubes A1-4, B1-4 = forward primers (80µL each); tubes C1-4, D1-4 = reverse primers (80µL each).
+                        1.5mL tubes: tubes A1-4, B1-4 = forward primers (100µL each); tubes C1-4, D1-4 = reverse primers (100µL each).
                         5mL tubes: tube A5 = master mix with target template (3.6mL), tube C5 = negative control master mix (3.6mL).
                         '''
 }
