@@ -1,5 +1,5 @@
 # File organization and Git configuration of this project
-This project has been organized to allow code edits here on Github and on OP13 LL's laptop; edits in either of these locations are pushed to two remotes (this Github plus `L:/OPENTRONS/scripts`). The bottom line here is this: *only* edit code here on Github or on OP13 LL's personal device. *Do not edit the code in the L drive; changes made here will not be saved.*
+This project has been organized to allow code edits here on Github and on OP13 LL's laptop; edits in either of these locations are pushed to two remotes (this Github plus `L:/OPENTRONS/scripts`). The bottom line here is this: *only* edit code here on Github or on OP13 LL's personal device. *Do not edit the code in the L drive; changes made there will not be saved.*
 
 ### Git configuration
 - Local for edits exists in `C:/Users/lucy/opentrons/opentrons` </br>
