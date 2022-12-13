@@ -11,3 +11,7 @@ Accessing each of these repositories in Git Bash:
 - Github: `https://github.com/aldatubio/opentrons.git`
 - OP13 LL Local: `c/Users/lucy/opentrons/opentrons`
 - L drive: `//10.225.40.23/lab/OPENTRONS/codedump/opentrons`
+
+After major updates, ensure that all repositories are "caught up" with each other.
+- Local edits: `git push` to Github
+- Github edits: `git fetch` followed by `git pull` on *both* local repos
