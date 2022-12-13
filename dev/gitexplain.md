@@ -1,7 +1,13 @@
 # File organization and Git configuration of this project
-This project has been organized to allow code edits here on Github and on OP13 LL's laptop; edits in either of these locations are pushed to two remotes (this Github plus `L:/OPENTRONS/scripts`). The bottom line here is this: *only* edit code here on Github or on OP13 LL's personal device. *Do not edit the code in the L drive; changes made there will not be saved.*
 
-### Git configuration
-- Local for edits exists in `C:/Users/lucy/opentrons/opentrons` </br>
-- Remote for edits/file viewing (fetch and push) exists at `github.com/aldatubio/opentrons.git` </br>
-- Remote for file viewing (push) exists in `//10.225.40.23/lab/OPENTRONS/scripts/.git`
+![Hierarchy of git repos for this project](https://github.com/aldatubio/opentrons/blob/main/dev/git_setup.jpg?raw=true)
+
+- Bare remote hub exists at on Github - use as cloud storage
+- Local for edits exists on OP13 LL's PC - use for script development (push/pull from here)
+- Local for file viewing exists in L drive - use for locally running Opentrons scripts (pull from here)
+  - L drive repository supports push requests, but this is not advised to reduce conflicts between repositories
+
+Accessing each of these repositories in Git Bash:
+- Github: `https://github.com/aldatubio/opentrons.git`
+- OP13 LL Local: `c/Users/lucy/opentrons/opentrons`
+- L drive: `//10.225.40.23/lab/OPENTRONS/codedump/opentrons`
