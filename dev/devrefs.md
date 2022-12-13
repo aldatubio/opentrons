@@ -10,3 +10,4 @@
 - **[View hidden files and folders in Windows 10](https://support.microsoft.com/en-us/search?query=how%20to%20view%20hidden%20files%20in%20windows%2010)** - accessible from File Explorer
 - **[git revert --continue stuck never finishes](https://stackoverflow.com/questions/65630304/git-revert-continue-stuck-never-finishes)**
 - **[Push git changes to a shared network drive](https://stackoverflow.com/questions/11635493/push-git-changes-to-a-shared-network-drive)** (StackOverflow)
+- **[Make an existing Git branch track a remote branch](https://stackoverflow.com/questions/520650/make-an-existing-git-branch-track-a-remote-branch)**
