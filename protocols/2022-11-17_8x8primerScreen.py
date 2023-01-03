@@ -176,7 +176,12 @@ def run(protocol: protocol_api.ProtocolContext):
     # Instead, use (deprecated?) comment() method to display text.
     # Comment text will show up in run log portion of app screen; can be somewhat hard to find.
     protocol.pause()
-    protocol.comment('Primer plating complete. Tap or spin down plate to mix, then add negative control master mix tube to rack.')
+    
+    # If pausing between steps 3a and 3b:
+    #protocol.comment('Primer plating complete. Tap or spin down plate to mix, then add negative control master mix tube to rack.')
+    
+    # If no pause between steps 3a and 3b:
+    protocol.comment('Primer plating complete. Tap or spin down plate to mix, then add both master mix tubes to rack.')
     
     # In[ ]:
 
@@ -207,8 +212,10 @@ def run(protocol: protocol_api.ProtocolContext):
         p300.blow_out(mastermixes['C5'])                                                      # blow out into source well
     p300.drop_tip()
 
-    protocol.pause()
-    protocol.comment('NTC master mix plating complete. Add tube of master mix with template to rack.')
+    # to re-add pause step, un-comment the next two lines,
+    # and use protocol.comment() on line 181 instead of 184
+    #protocol.pause()
+    #protocol.comment('NTC master mix plating complete. Add tube of master mix with template to rack.')
     
     # In[ ]:
 
