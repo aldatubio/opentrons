@@ -5,7 +5,7 @@
 # **Updated 2023-01-03** <br>
 # **Author: OP13 LL**
 # 
-# **Purpose:** Test 64 different forward-reverse primer pairs for sensitivity (ability to amplify target template) and specificity (inability to amplify NTC). <br>
+# **Purpose:** Test 64 different forward-reverse primer pairs for sensitivity (ability to amplify target template) and specificity (inability to amplify negative control). <br>
 # **Duration:** 55 min
 # 
 # **Execution:** This script fills a 384-well plate as follows:
@@ -21,7 +21,7 @@
 #      - Columns 22-24: reverse primer 8
 #  - **STEP 3: Master mix (20 min)**
 #      - Rows A-H: master mix with target template
-#      - Rows I-P: master mix with NTC
+#      - Rows I-P: master mix with negative control
 #      
 # **Reaction (total 20uL per well):**
 #  - 1.5µL 13X forward primer
@@ -29,9 +29,9 @@
 #  - 17µL master mix
 #  
 # **Deck setup:**
-#  - **1:** 15-count 15mL screw cap tube rack, with tubes as follows:
-#      - tube A5: master mix with target template (6.76mL)
-#      - tube C5: negative control master mix (6.93mL)
+#  - **1:** 15-count 5mL screw cap tube rack, with tubes as follows:
+#      - tube A5: master mix with target template (3.4mL)
+#      - tube C5: negative control master mix (3.4mL)
 #  - **2:** Applied Biosystems 384-well MicroAmp plate
 #  - **4:** 96-count 300µL tip rack (protocol uses 2 tips)
 #  - **5:** 24-count 1.5mL snap cap tube rack, with tubes as follows:
@@ -51,7 +51,7 @@ metadata = {
     'author': 'OP13 LL',
     'description': '''LIQUID SETUP:
                         1.5mL tubes: tubes A1-4, B1-4 = forward primers (~250µL each); tubes C1-4, D1-4 = reverse primers (~250µL each).
-                        15mL tubes: tube A5 = master mix with target template (6.76mL), tube C5 = negative control master mix (6.93mL).
+                        5mL tubes: tube A5 = master mix with target template (3.4mL), tube C5 = negative control master mix (3.4mL).
                         '''
 }
 
@@ -86,17 +86,19 @@ def run(protocol: protocol_api.ProtocolContext):
     plate = protocol.load_labware('appliedbiosystemsmicroamp_384_wellplate_40ul', 2)
 
     '''
+    # for use in Jupyter Notebook:
     # because 5mL tubes aren't defined by Opentrons, we have to load a custom definition here
     with open('usascientific_15_tuberack_5000ul.json') as labware_file:
         labware_def = json.load(labware_file)
         mastermixes = protocol.load_labware_from_definition(labware_def, 1)
     '''
     # to use 5mL tubes, use our lab's custom definition:
-    # mastermixes = protocol.load_labware('usascientific_15_tuberack_5000ul', 1)
-    
+    mastermixes = protocol.load_labware('usascientific_15_tuberack_5000ul', 1)
+
+    # to use 15mL tubes, use the Nest definition:
     # Opentrons doesn't have a labware definition for the Nunc / ThermoFisher 15mL tubes we use;
     # however, NEST tube technical specs are very close to the Nunc tubes, so we'll use this definition
-    mastermixes = protocol.load_labware('opentrons_15_tuberack_nest_15ml_conical', 1)
+    # mastermixes = protocol.load_labware('opentrons_15_tuberack_nest_15ml_conical', 1)
 
     # pipette initialization/setup
     p20 = protocol.load_instrument('p20_single_gen2', 'right', tip_racks=[p20tips])
@@ -220,14 +222,14 @@ def run(protocol: protocol_api.ProtocolContext):
     # to re-add pause step, un-comment the next two lines,
     # and use protocol.comment() on line 181 instead of 184
     #protocol.pause()
-    #protocol.comment('NTC master mix plating complete. Add tube of master mix with template to rack.')
+    #protocol.comment('Negative control master mix plating complete. Add tube of master mix with template to rack.')
     
     # In[ ]:
 
 
     # 3b. MASTER MIX | 10 min
 
-    # fill rows A-H with positive control master mix (10 min)
+    # fill rows A-H with master mix + template (10 min)
 
     p300.pick_up_tip()
     for column in range(12):
