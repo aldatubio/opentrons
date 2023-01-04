@@ -2,7 +2,7 @@
 # **Updated 2023-01-03** <br>
 # **Author: OP13 LL**
 # 
-# **Purpose:** Fill the top half of a 384-well plate with master mix containing viral template, and fill the bottom half with negative control master mix. <br>
+# **Purpose:** Fill the top half of a 384-well plate with master mix containing viral template, and fill the bottom half with negative control master mix.<br>
 # **Duration:** 20 min
 # 
 # **Execution:** This script fills a 384-well plate, already containing 3µL primers, as follows:
@@ -63,8 +63,7 @@ def run(protocol: protocol_api.ProtocolContext):
     # mastermixes = protocol.load_labware('opentrons_15_tuberack_nest_15ml_conical', 1)
 
     # pipette initialization/setup
-    p20 = protocol.load_instrument('p20_single_gen2', 'right', tip_racks=[p20tips])
-    p300 = protocol.load_instrument('p300_single_gen2', 'left', tip_racks=[p300tips])
+    p300 = protocol.load_instrument('p300_single_gen2', 'right', tip_racks=[p300tips])
 
 
 
