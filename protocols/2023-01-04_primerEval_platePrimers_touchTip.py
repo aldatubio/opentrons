@@ -35,7 +35,7 @@ from opentrons import protocol_api
 
 metadata = {
     'apiLevel': '2.13',
-    'protocolName': 'tmp | Primer Eval - Primer Plating (updated 2023-01-04)',
+    'protocolName': 'Primer Eval - Primer Plating with Extra Tip Touch (updated 2023-01-04)',
     'author': 'OP13 LL',
     'description': '''For use in 7B10 robot.
                         LIQUID SETUP:
@@ -79,7 +79,7 @@ def run(protocol: protocol_api.ProtocolContext):
             plate.rows()[i],                        # dispense into row with index i (A-D)
             new_tip = 'never'
         )
-
+        p20.touch_tip(reservoir['A'+str(i+1)])      # touch tip within source tube
         p20.distribute(
             primerVolume,
             reservoir['A'+str(i+1)],
