@@ -1,4 +1,4 @@
-# # Primer Evaluation - Plating Primers
+# # Primer Evaluation | Plating Primers
 # **Updated 2023-01-03** <br>
 # **Author: OP13 LL**
 # 
@@ -35,9 +35,9 @@ from opentrons import protocol_api
 
 metadata = {
     'apiLevel': '2.13',
-    'protocolName': 'Primer Eval - Primer Plating (updated 2023-01-04)',
+    'protocolName': 'Primer Evaluation | Primer Plating | updated 2023-01-04',
     'author': 'OP13 LL',
-    'description': '''For use in 7B10 robot.
+    'description': '''For use in 7B10 robot. | 
                         LIQUID SETUP:
                         1.5mL tubes: tubes A1-4, B1-4 = forward primers (100µL each); tubes C1-4, D1-4 = reverse primers (100µL each).
                         '''
