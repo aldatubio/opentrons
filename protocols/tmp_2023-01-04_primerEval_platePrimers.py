@@ -35,7 +35,7 @@ from opentrons import protocol_api
 
 metadata = {
     'apiLevel': '2.13',
-    'protocolName': 'Primer Eval - Primer Plating (updated 2023-01-04)',
+    'protocolName': 'tmp | Primer Eval - Primer Plating (updated 2023-01-04)',
     'author': 'OP13 LL',
     'description': '''For use in 7B10 robot.
                         LIQUID SETUP:
@@ -91,6 +91,7 @@ def run(protocol: protocol_api.ProtocolContext):
     protocol.pause()
     protocol.comment('Primer F1-F4 plating complete. Add forward primers 5-8 in slots B1-4.')
 
+'''
     # tubes B1-B4: forward primers 5-8
     for i in range(4):
         p20.pick_up_tip()
@@ -110,7 +111,7 @@ def run(protocol: protocol_api.ProtocolContext):
 
     protocol.pause()
     protocol.comment('Forward primer plating complete. Add reverse primers 1-4 in slots C1-4.')
-
+'''
     # 2. REVERSE PRIMERS | 20 min
     # fill trios of columns with the correct reverse primers
     # columns 1-3 get reverse primer 1, columns 4-6 get reverse primer 2, etc.
@@ -130,7 +131,7 @@ def run(protocol: protocol_api.ProtocolContext):
 
     protocol.pause()
     protocol.comment('Primer R1-R4 plating complete. Add reverse primers 5-8 in slots D1-4.')
-
+'''
     # tubes D1-D4: reverse primers 5-8
     for i in range(4):
         p20.distribute(
@@ -139,6 +140,6 @@ def run(protocol: protocol_api.ProtocolContext):
             plate.columns()[12+3*i:15+3*i],         # columns 13-24 (indices 12-23)
             touch_tip = True
         )
-
+'''
     protocol.home()
 
