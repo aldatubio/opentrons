@@ -94,7 +94,7 @@ def run(protocol: protocol_api.ProtocolContext):
             plate.rows()[i+4],                      # dispense into row with index i+4 (E-H)
             new_tip = 'never',
             blowout = True,
-            blowout_location = reservoir['B'+str(i+1)]
+            blowout_location = 'source well'
         )
 
         p20.drop_tip()
@@ -118,7 +118,7 @@ def run(protocol: protocol_api.ProtocolContext):
             plate.columns()[3*i:3+3*i],             # columns 1-12 (indices 0-11)
             touch_tip = True,
             blowout = True,
-            blowout_location = reservoir['C'+str(i+1)]
+            blowout_location = 'source well'
         )
 
     protocol.home()
