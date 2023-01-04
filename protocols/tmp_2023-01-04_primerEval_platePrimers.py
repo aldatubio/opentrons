@@ -77,21 +77,14 @@ def run(protocol: protocol_api.ProtocolContext):
             primerVolume,
             reservoir['A'+str(i+1)],
             plate.rows()[i],                        # dispense into row with index i (A-D)
-            new_tip = 'never'
-        )
-
-        p20.distribute(
-            primerVolume,
-            reservoir['A'+str(i+1)],
-            plate.rows()[i+8],                      # dispense into row with index i+8 (I-L)
-            new_tip = 'never'                      
+            new_tip = 'never',
+            disposal_volume = 5
         )
         p20.drop_tip()
 
     protocol.pause()
     protocol.comment('Primer F1-F4 plating complete. Add forward primers 5-8 in slots B1-4.')
 
-'''
     # tubes B1-B4: forward primers 5-8
     for i in range(4):
         p20.pick_up_tip()
@@ -99,19 +92,16 @@ def run(protocol: protocol_api.ProtocolContext):
             primerVolume,
             reservoir['B'+str(i+1)],
             plate.rows()[i+4],                      # dispense into row with index i+4 (E-H)
-            new_tip = 'never'
+            new_tip = 'never',
+            blowout = True,
+            blowout_location = reservoir['B'+str(i+1)]
         )
-        p20.distribute(
-            primerVolume,
-            reservoir['B'+str(i+1)],
-            plate.rows()[i+12],                     # dispense into row with index i+12 (M-P)
-            new_tip = 'never'
-        )
+
         p20.drop_tip()
 
     protocol.pause()
     protocol.comment('Forward primer plating complete. Add reverse primers 1-4 in slots C1-4.')
-'''
+
     # 2. REVERSE PRIMERS | 20 min
     # fill trios of columns with the correct reverse primers
     # columns 1-3 get reverse primer 1, columns 4-6 get reverse primer 2, etc.
@@ -126,20 +116,10 @@ def run(protocol: protocol_api.ProtocolContext):
             primerVolume,
             reservoir['C'+str(i+1)],
             plate.columns()[3*i:3+3*i],             # columns 1-12 (indices 0-11)
-            touch_tip = True
+            touch_tip = True,
+            blowout = True,
+            blowout_location = reservoir['C'+str(i+1)]
         )
 
-    protocol.pause()
-    protocol.comment('Primer R1-R4 plating complete. Add reverse primers 5-8 in slots D1-4.')
-'''
-    # tubes D1-D4: reverse primers 5-8
-    for i in range(4):
-        p20.distribute(
-            primerVolume,
-            reservoir['D'+str(i+1)],
-            plate.columns()[12+3*i:15+3*i],         # columns 13-24 (indices 12-23)
-            touch_tip = True
-        )
-'''
     protocol.home()
 
