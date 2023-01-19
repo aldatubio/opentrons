@@ -1,34 +1,33 @@
-'''
-Primer Optimization
-Updated 2023-01-19
-Author: OP13 LL
+# Primer Optimization
+# Updated 2023-01-19
+# Author: OP13 LL
+#
+# Purpose: Prepare dilution series of one forward and one reverse primer,
+# in order to optimize the pair's sensitivity and specificity.
+#
+# Duration:
+#
+# Execution: This script will prepare 4X primer pair dilutions as follows:
+#     1. Variable forward primer concentrations
+#         - 2A: 1:2 | 1000 nM R + 500 nM F
+#         - 3A: 1:3 | 1000 nM R + 333 nM F
+#         - 4A: 1:4 | 1000 nM R + 250 nM F
+#         - 5A: 1:5 | 1000 nM R + 200 nM F
+#     2. Dilution series of tubes from previous step
+#         - 100%: neat sample from step 1 tube
+#         - 75%: 30 µL sample, 10 µL H2O
+#         - 50%: 20 µL sample, 20 µL H2O
+#         - 25%: 10 µL sample, 30 µL H2O
+# 
+# Deck setup:
+#     1. 200µL filter tips
+#     2. 1.5mL tubes in rack, as follows:
+#         A1: forward primer
+#         B1: reverse primer
+#         C1: water
+#         A2-D5: empty tubes, to be filled (matching descriptions/names on Labguru)
+#     3. 20µL tips
 
-Purpose: Prepare dilution series of one forward and one reverse primer,
-in order to optimize the pair's sensitivity and specificity.
-
-Duration:
-
-Execution: This script will prepare 4X primer pair dilutions as follows:
-    1. Variable forward primer concentrations
-        - 2A: 1:2 | 1000 nM R + 500 nM F
-        - 3A: 1:3 | 1000 nM R + 333 nM F
-        - 4A: 1:4 | 1000 nM R + 250 nM F
-        - 5A: 1:5 | 1000 nM R + 200 nM F
-    2. Dilution series of tubes from previous step
-        - 100%: neat sample from step 1 tube
-        - 75%: 30 µL sample, 10 µL H2O
-        - 50%: 20 µL sample, 20 µL H2O
-        - 25%: 10 µL sample, 30 µL H2O
-
-Deck setup:
-    1. 300µL tips
-    2. 1.5mL tubes in rack, as follows:
-        A1: forward primer
-        B1: reverse primer
-        C1: water
-        A2-D5: empty tubes, to be filled (matching descriptions/names on Labguru)
-
-'''
 
 from opentrons import protocol_api
 
@@ -90,8 +89,40 @@ def run(protocol: protocol_api.ProtocolContext):
     ### 2. Primer pair dilutions ###
     ################################
 
-    # add water to 
+    # add water to tubes such that:
+    # row B tubes = 10 µL
+    # row C tubes = 20 µL
+    # row D tubes = 30 µL
+
+    for i in range(3):              # 3 rows: B, C, D
+        list = []                   # for each new loop iteration, make an empty list
+        row = chr(i+66)             # convert iteration number to row letter using ASCII
+        for j in range(4):          # iterate through columns in row
+            list.append(row + str(j+2))     # fill list with correct tube names
+        p300.distribute(
+            (i*10)+10,              # starting with 10µL, add 10µL for every loop iteration
+            tubes['C1'],
+            [tubes.wells_by_name()[tube_name] for tube_name in list]
+        )
 
 
+    # add primer mix to tubes such that:
+    # row B tubes = 30 µL
+    # row C tubes = 20 µL
+    # row D tubes = 10 µL
+    # where tubes B, C, and D in a column are all dilutions of tube A in the same column
+
+    for i in range(4):              # 4 columns: 2, 3, 4, 5
+        list = []
+        col = str(i+2)              # save iteration number as column number
+        for j in range(3):          # iterate through rows in column
+            list.append(chr(j+66) + col)   # fill list with correct tube names
+        p300.distribute(
+            [30, 20, 10],
+            tubes['A'+col],
+            [tubes.wells_by_name()[tube_name].top(-5) for tube_name in list]
+        )
 
     protocol.home()
+
+run(protocol)
