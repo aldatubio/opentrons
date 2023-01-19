@@ -76,15 +76,14 @@ def run(protocol: protocol_api.ProtocolContext):
         [tubes.wells_by_name()[tube_name] for tube_name in ['A2', 'A3', 'A4', 'A5']
     )
 
-    # add 60 µL reverse primer to A2-A5
-    p300.distribute(
-        60,
-        tubes['B1'],
-        [tubes.wells_by_name()[tube_name] for tube_name in ['A2', 'A3', 'A4', 'A5']
-    )
-
-    protocol.pause()
-    protocol.comment('Vortex and spin down tubes A2-A5, then add back to rack.')
+    # add 60 µL reverse primer to A2-A5 and mix
+    for i in range(4):
+        p300.transfer(
+            60,
+            tubes['B1'],
+            tubes['A'+str(i+2)],
+            mix_after = (4, 80)
+        )
 
 
     ################################
