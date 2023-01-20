@@ -43,8 +43,8 @@ def run(protocol: protocol_api.ProtocolContext):
     protocol.home()
 
     # deck setup
-    p20tips = protocol.load_labware('opentrons_96_tiprack_20uL', 3)
-    p300tips = protocol.load_labware('opentrons_96_tiprack_300uL', 1)
+    p20tips = protocol.load_labware('opentrons_96_filtertiprack_20ul', 3)
+    p300tips = protocol.load_labware('opentrons_96_filtertiprack_200ul', 1)
     tubes = protocol.load_labware('opentrons_24_tuberack_eppendorf_1.5ml_safelock_snapcap', 2)
 
     # pipette initialization
