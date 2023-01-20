@@ -1,11 +1,11 @@
 # Primer Optimization
-# Updated 2023-01-19
+# Updated 2023-01-20
 # Author: OP13 LL
 #
 # Purpose: Prepare dilution series of one forward and one reverse primer,
 # in order to optimize the pair's sensitivity and specificity.
 #
-# Duration: 10 min
+# Duration: 7.5 min
 #
 # Execution: This script will prepare 4X primer pair dilutions as follows:
 #     1. Variable forward primer concentrations
@@ -25,7 +25,7 @@
 #         A1: forward primer (250 µL)
 #         B1: reverse primer (250 µL)
 #         A2-D5: empty tubes, to be filled (matching descriptions/names on Labguru)
-#     3. 200µL filter tips
+#     3. 200µL filter tips (uses 12 tips)
 
 
 
@@ -33,9 +33,13 @@ from opentrons import protocol_api
 
 metadata = {
     'apiLevel': '2.13',
-    'protocolName': 'DEV Primer Optimization',
+    'protocolName': 'Primer Optimization | updated 2023-01-20',
     'author': 'OP13 LL',
-    'description': 'text'
+    'description': '''Performs dilutions for primer optimization. || 
+                    TUBE SETUP: 5mL screw-cap tube of water in slot A5 of large tube rack;
+                    in small tube rack,
+                    1.5mL snap-cap tubes with 250µL of primers (A1: forward, B1: reverse);
+                    and 16 empty 1.5mL snap-cap tubes in slots A2-D5.'''
 }
 
 def run(protocol: protocol_api.ProtocolContext):
