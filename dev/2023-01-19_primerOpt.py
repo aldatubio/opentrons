@@ -64,7 +64,7 @@ def run(protocol: protocol_api.ProtocolContext):
     p300.distribute(
         [20, 30, 36],
         tubes['C1'],
-        [tubes.wells_by_name()[tube_name] for tube_name in ['A3', 'A4', 'A5']
+        [tubes.wells_by_name()[tube_name] for tube_name in ['A3', 'A4', 'A5']]
     )
 
     # add forward primer of appropriate volume to each tube
@@ -72,7 +72,7 @@ def run(protocol: protocol_api.ProtocolContext):
     p300.distribute(
         [60, 40, 30, 24],
         tubes['A1'],
-        [tubes.wells_by_name()[tube_name] for tube_name in ['A2', 'A3', 'A4', 'A5']
+        [tubes.wells_by_name()[tube_name] for tube_name in ['A2', 'A3', 'A4', 'A5']]
     )
 
     # add 60 µL reverse primer to A2-A5 and mix
