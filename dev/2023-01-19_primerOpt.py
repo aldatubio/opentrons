@@ -5,7 +5,7 @@
 # Purpose: Prepare dilution series of one forward and one reverse primer,
 # in order to optimize the pair's sensitivity and specificity.
 #
-# Duration:
+# Duration: 10 min
 #
 # Execution: This script will prepare 4X primer pair dilutions as follows:
 #     1. Variable forward primer concentrations
@@ -73,7 +73,7 @@ def run(protocol: protocol_api.ProtocolContext):
     p300.distribute(
         [60, 40, 30, 24],
         tubes['A1'],
-        [tubes.wells_by_name()[tube_name] for tube_name in ['A2', 'A3', 'A4', 'A5']],
+        [tubes.wells_by_name()[tube_name].bottom(10) for tube_name in ['A2', 'A3', 'A4', 'A5']],
         disposal_volume = 10
     )
 
@@ -96,6 +96,7 @@ def run(protocol: protocol_api.ProtocolContext):
     # row C tubes = 20 µL
     # row D tubes = 30 µL
 
+    p300.pick_up_tip()              # allows use of new_tip = 'never'
     for i in range(3):              # 3 rows: B, C, D
         list = []                   # for each new loop iteration, make an empty list
         row = chr(i+66)             # convert iteration number to row letter using ASCII
@@ -105,8 +106,10 @@ def run(protocol: protocol_api.ProtocolContext):
             (i*10)+10,              # starting with 10µL, add 10µL for every loop iteration
             water['A5'],
             [tubes.wells_by_name()[tube_name] for tube_name in list],
-            disposal_volume = 10
+            disposal_volume = 10,
+            new_tip = 'never'       # one tip for all water dispenses
         )
+    p300.drop_tip()
 
 
     # add primer mix to tubes such that:
@@ -123,8 +126,9 @@ def run(protocol: protocol_api.ProtocolContext):
         p300.distribute(
             [30, 20, 10],
             tubes['A'+col],
-            [tubes.wells_by_name()[tube_name].top(-5) for tube_name in list],
-            disposal_volume = 10
+            [tubes.wells_by_name()[tube_name].top(-15) for tube_name in list],
+            disposal_volume = 10,
+            touch_tip = True
         )
 
     protocol.home()
