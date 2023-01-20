@@ -20,13 +20,13 @@
 #         - 25%: 10 µL sample, 30 µL H2O
 # 
 # Deck setup:
-#     1. 200µL filter tips
-#     2. 1.5mL tubes in rack, as follows:
-#         A1: forward primer
-#         B1: reverse primer
-#         C1: water
+#     1. 5mL screw-cap tube of water in rack (located in slot A5)
+#     2. 1.5mL snap-cap tubes in rack, as follows:
+#         A1: forward primer (250 µL)
+#         B1: reverse primer (250 µL)
 #         A2-D5: empty tubes, to be filled (matching descriptions/names on Labguru)
-#     3. 20µL tips
+#     3. 200µL filter tips
+
 
 
 from opentrons import protocol_api
@@ -43,12 +43,12 @@ def run(protocol: protocol_api.ProtocolContext):
     protocol.home()
 
     # deck setup
-    p20tips = protocol.load_labware('opentrons_96_filtertiprack_20ul', 3)
-    p300tips = protocol.load_labware('opentrons_96_filtertiprack_200ul', 1)
+    p300tips = protocol.load_labware('opentrons_96_filtertiprack_200ul', 3)
     tubes = protocol.load_labware('opentrons_24_tuberack_eppendorf_1.5ml_safelock_snapcap', 2)
+    # custom 5mL tube definition
+    water = protocol.load_labware('usascientific_15_tuberack_5000ul', 1)
 
     # pipette initialization
-    p20 = protocol.load_instrument('p20_single_gen2', 'right', tip_racks=[p20tips])
     p300 = protocol.load_instrument('p300_single_gen2', 'left', tip_racks=[p300tips])
 
 
@@ -63,7 +63,7 @@ def run(protocol: protocol_api.ProtocolContext):
     # 0, 20, 30, 36 µL to A2-A5, respectively
     p300.distribute(
         [20, 30, 36],
-        tubes['C1'],
+        water['A5'],
         [tubes.wells_by_name()[tube_name] for tube_name in ['A3', 'A4', 'A5']],
         disposal_volume = 10    # default excess is 20 µL (10% of pipette max) which seems wasteful
     )
@@ -103,7 +103,7 @@ def run(protocol: protocol_api.ProtocolContext):
             list.append(row + str(j+2))     # fill list with correct tube names
         p300.distribute(
             (i*10)+10,              # starting with 10µL, add 10µL for every loop iteration
-            tubes['C1'],
+            water['A5'],
             [tubes.wells_by_name()[tube_name] for tube_name in list],
             disposal_volume = 10
         )
