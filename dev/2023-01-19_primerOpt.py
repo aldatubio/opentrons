@@ -124,5 +124,3 @@ def run(protocol: protocol_api.ProtocolContext):
         )
 
     protocol.home()
-
-run(protocol)
