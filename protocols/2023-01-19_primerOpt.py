@@ -1,5 +1,5 @@
 # Primer Optimization
-# Updated 2023-01-20
+# Updated 2023-01-24
 # Author: OP13 LL
 #
 # Purpose: Prepare dilution series of one forward and one reverse primer,
@@ -33,7 +33,7 @@ from opentrons import protocol_api
 
 metadata = {
     'apiLevel': '2.13',
-    'protocolName': 'Primer Optimization | updated 2023-01-20',
+    'protocolName': 'Primer Optimization | updated 2023-01-24',
     'author': 'OP13 LL',
     'description': '''Performs dilutions for primer optimization. || 
                     TUBE SETUP: 5mL screw-cap tube of water in slot A5 of large tube rack;
@@ -45,6 +45,10 @@ metadata = {
 def run(protocol: protocol_api.ProtocolContext):
 
     protocol.home()
+
+    # multiplier
+    # increase by 1 = increase number of plates prepped by 1
+    p = 2
 
     # deck setup
     p300tips = protocol.load_labware('opentrons_96_filtertiprack_200ul', 3)
@@ -66,7 +70,7 @@ def run(protocol: protocol_api.ProtocolContext):
     # add water of appropriate volume to each tube
     # 0, 20, 30, 36 µL to A2-A5, respectively
     p300.distribute(
-        [20, 30, 36],
+        [20*p, 30*p, 36*p],
         water['A5'],
         [tubes.wells_by_name()[tube_name] for tube_name in ['A3', 'A4', 'A5']],
         disposal_volume = 10    # default excess is 20 µL (10% of pipette max) which seems wasteful
@@ -75,7 +79,7 @@ def run(protocol: protocol_api.ProtocolContext):
     # add forward primer of appropriate volume to each tube
     # 60, 40, 30, 24 µL to A2-A5, respectively
     p300.distribute(
-        [60, 40, 30, 24],
+        [60*p, 40*p, 30*p, 24*p],
         tubes['A1'],
         [tubes.wells_by_name()[tube_name].bottom(10) for tube_name in ['A2', 'A3', 'A4', 'A5']],
         disposal_volume = 10
@@ -84,7 +88,7 @@ def run(protocol: protocol_api.ProtocolContext):
     # add 60 µL reverse primer to A2-A5 and mix
     for i in range(4):
         p300.transfer(
-            60,
+            60*p,
             tubes['B1'],
             tubes['A'+str(i+2)],
             mix_after = (4, 80)
@@ -107,7 +111,7 @@ def run(protocol: protocol_api.ProtocolContext):
         for j in range(4):          # iterate through columns in row
             list.append(row + str(j+2))     # fill list with correct tube names
         p300.distribute(
-            (i*10)+10,              # starting with 10µL, add 10µL for every loop iteration
+            ((i*10)+10)*p,              # starting with 10µL, add 10µL for every loop iteration
             water['A5'],
             [tubes.wells_by_name()[tube_name] for tube_name in list],
             disposal_volume = 10,
@@ -128,7 +132,7 @@ def run(protocol: protocol_api.ProtocolContext):
         for j in range(3):          # iterate through rows in column
             list.append(chr(j+66) + col)   # fill list with correct tube names
         p300.distribute(
-            [30, 20, 10],
+            [30*p, 20*p, 10*p],
             tubes['A'+col],
             [tubes.wells_by_name()[tube_name].top(-15) for tube_name in list],
             disposal_volume = 10,
