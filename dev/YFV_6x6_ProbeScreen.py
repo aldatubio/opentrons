@@ -92,7 +92,7 @@ def run(protocol: protocol_api.ProtocolContext):
         p20.distribute(
             volume,
             reservoir['A'+str(i+1)],       # primer mix 1 when i = 0
-            plate.wells(list),
+            [plate.wells()[wellIndex] for wellIndex in list],
             new_tip = 'never'
         )
         list = []
@@ -101,7 +101,7 @@ def run(protocol: protocol_api.ProtocolContext):
         p20.distribute(
             volume,
             reservoir['A'+str(i+1)],
-            plate.wells(list),
+            [plate.wells()[wellIndex] for wellIndex in list],
             new_tip = 'never'
         )
         list = []
@@ -110,7 +110,7 @@ def run(protocol: protocol_api.ProtocolContext):
         p20.distribute(
             volume,
             reservoir['A'+str(i+1)],
-            plate.wells(list),
+            [plate.wells()[wellIndex] for wellIndex in list],
             new_tip = 'never'
         )
         p20.drop_tip()                     # drop tip after all 3 rows filled with primer mix
@@ -138,7 +138,7 @@ def run(protocol: protocol_api.ProtocolContext):
         p20.distribute(
             volume,
             reservoir['D'+str(i+1)],
-            plate.wells(list),
+            [plate.wells()[wellIndex] for wellIndex in list],
             touch_tip = True
         )
 
