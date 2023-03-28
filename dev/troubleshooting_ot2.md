@@ -1,7 +1,9 @@
-# Troubleshooting
+# Troubleshooting Opentrons
 This guide contains code snippets and script references for problems we've encountered in the past (hardware and software) and the software solutions we used to fix or get around these problems.
 
-See also: [Opentrons API Version 2 Reference](https://docs.opentrons.com/v2/new_protocol_api.html)
+See also:
+- [Opentrons API Version 2 Reference](https://docs.opentrons.com/v2/new_protocol_api.html)
+- [Opentrons comprehensive user guide](https://insights.opentrons.com/hubfs/Products/OT-2/OT-2R%20User%20Manual%20V1.0.pdf?_gl=1*19jxt1n*_ga*MjEzMDcwMDU2MS4xNjY3NTY2OTg3*_ga_66HK7MC5D7*MTY3OTkyNjM2NC41LjAuMTY3OTkyNjM2NC42MC4wLjA.*_ga_GNSMNLW4RY*MTY3OTkyNjM2NC40My4wLjE2Nzk5MjYzNjQuNjAuMC4w)
 
 **Contents**
 - [Liquid handling](#liquid-handling)
@@ -15,6 +17,9 @@ See also: [Opentrons API Version 2 Reference](https://docs.opentrons.com/v2/new_
 ## Liquid handling
 ### Viscous liquids
 Generally, issues with viscous liquids can be solved by using building block commands to access additional pipetting parameters.
+
+For an in-depth guide that covers this topic (more so than what is available below), view Opentrons' webinar about the topic:
+- **[Viscous and volatile liquid handling](https://insights.opentrons.com/lp/webinar-01-11-23-tips-and-tricks-viscous-liquids-typ?submissionGuid=8d793e68-d66e-499f-9713-9c2d932e8856)** - includes code snippets (defining functions for repeat transfer of liquids)
 
 #### Liquid isn't dispensing completely, or air bubbles are present when aspirating
 `InstrumentContext.aspirate()` and `InstrumentContext.dispense()` can take an additional argument that specifies a rate multiplier. See the bottom of Opentrons API v2's [Pipettes reference page](https://docs.opentrons.com/v2/new_pipette.html) for default speeds.
