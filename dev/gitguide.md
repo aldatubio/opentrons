@@ -1,4 +1,4 @@
-# Developer references
+# Using Git and command-line interfaces
 
 ## Guides and references
 - **[Git Immersion](https://gitimmersion.com/index.html)** - Git fundamentals tutorial
