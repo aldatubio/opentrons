@@ -19,11 +19,11 @@ See also:
 ### Viscous liquids
 Generally, issues with viscous liquids can be solved by using building block commands to access additional pipetting parameters.
 
-#### Opentrons webinar
-For in-depth guides that cover this topic (more so than what is available below), view Opentrons' resources about the topic:
+#### Opentrons-provided resources
+For in-depth guides that provide a multitude of fixes for volatile and viscous liquid handling, check out the links below. 
 - **[Webinar: Viscous and volatile liquid handling](https://insights.opentrons.com/lp/webinar-01-11-23-tips-and-tricks-viscous-liquids-typ?submissionGuid=8d793e68-d66e-499f-9713-9c2d932e8856)** - includes code snippets (defining functions for repeat transfer of liquids)
 - **[Support: Viscous liquid handling with Python API](https://support.opentrons.com/s/article/How-to-handle-viscous-liquids-in-the-Python-API)**
-- **[PDF: Viscous liquid handling using the OT-2](https://opentrons-landing-img.s3.amazonaws.com/application+notes/Viscous+Liquids+App+Note.pdf)**
+- **[PDF: Viscous liquid handling using the OT-2](https://opentrons-landing-img.s3.amazonaws.com/application+notes/Viscous+Liquids+App+Note.pdf)** - includes example code blocks, some of which are described in further detail below
 - Note that Opentrons does not recommend using multi-dispense functionality with viscous liquids, as this can lead to inconsistent dispenses.
 
 #### Liquid isn't dispensing completely, or air bubbles are present when aspirating
@@ -55,21 +55,63 @@ p300.drop_tip()
 ```
 
 #### Large droplets present on pipette tip after dispensing
-If droplets are still present after dispensing, but before the blowout step, dispenses can be adjusted such that the pipette tip is touching the side of the destination well during the dispense step.
+- If droplets are still present after dispensing, but before the blowout step, dispenses can be adjusted such that the pipette tip is touching the side of the destination well during the dispense step (visualized below).
+- If droplets are still present after the blowout step, blowout speed can be reduced to ensure full elimination of any residual liquid. 
+<p align = 'center'>
+  <img src="https://user-images.githubusercontent.com/119699492/228574261-4521577d-c851-40c7-ac14-537117f60a42.png" width="782" height="357">
+</p>
+
+The code snippet below shows the use of both of these techniques to aspirate 100uL of liquid from a tube in A1 of a rack and dispense the liquid into A2 of the same rack. Note:
+- In order to adjust tip location within a well using `types.Point(x,y,z)`, the import statement `from opentrons.types import Point` must be present at the top of the script.
+- `InstrumentContext.blow_out()` does not take a rate modifier argument. Therefore, the blowout rate of the pipette itself must be changed, then changed back to its original value after blowout.
 ```python
-p300.pick_up_tip()
-p300.aspirate(100, rack['A1'])
+from opentrons import protocol_api
+from opentrons.types import Point
 
-p300.dispense(
-  100,
-  rack['A2'].top().move(types.point(x,y,z))
-) 
-```
-![image](https://user-images.githubusercontent.com/119699492/228574261-4521577d-c851-40c7-ac14-537117f60a42.png)
+metadata = {
+    'apiLevel': '2.13'
+}
 
+def run(protocol: protocol_api.ProtocolContext):
+    
+    protocol.home()
+    
+    p300tips = protocol.load_labware('opentrons_96_filtertiprack_200ul',3, 'tip rack')
+    rack = protocol.load_labware('opentrons_24_tuberack_eppendorf_1.5ml_safelock_snapcap',2, 'tube rack')
+    
+    p300 = protocol.load_instrument('p300_single_gen2', 'left', tip_racks = [p300tips])
+    
+    p300.pick_up_tip()
+    p300.aspirate (
+        100,
+        rack['A1'],
+        rate = 1.05     # 1.05x default rate
+        )
+    protocol.delay(20)
+    p300.dispense(
+        100,
+        rack['A2'].top()                                # from default dispense location,
+            .move(Point(x=(rack['A2'].diameter/2-1))),  # move 1 radius minus 1 mm in the x direction
+        rate = 0.05                                     # 1/20th of default rate
+        )
+    
+    # first, save the default blowout rate in a new variable
+    default_p300_blowout = p300.flow_rate.blow_out
+    # lower the blowout rate
+    p300.flow_rate.blow_out = 10 #uL/s
+    # blowout step 
+    p300.blow_out()
+    # change blowout rate back to saved default 
+    p300.flow_rate.blow_out = default_p300_blowout
+    
+    
+    p300.drop_tip()
+    
+    protocol.home()
+ ```
 
 ### Robot is skipping wells when dispensing
-Make sure the volume being dispensed is reasonable. Disregarding Opentrons recommendations, the P300 seems to be able to pipette as little as 10uL at a time; when pipetting 5uL, liquid would randomly fail to be dispensed into some wells. Adjust pipetting steps and reagent concentrations to avoid pipetting volumes that are too small.
+Ensure the volume being dispensed is reasonable. Disregarding Opentrons recommendations, the P300 seems to be able to pipette as little as 10uL at a time; when pipetting 5uL, liquid randomly fails to be dispensed into some wells. Adjust pipetting steps and reagent concentrations to avoid pipetting volumes that are too small.
 
 ## Robot is using more tips than necessary
 `InstrumentContext.distribute()` allows the user to specify when to get a new tip - `'never'` is a valid argument, but make sure that if you choose this, you're using `InstrumentContext.pick_up_tip()` and `InstrumentContext.drop_tip()` before and after distributing liquid.
