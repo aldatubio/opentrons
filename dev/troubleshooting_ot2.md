@@ -2,10 +2,11 @@
 This guide contains code snippets and script references for problems we've encountered in the past (hardware and software) and the software solutions we used to fix or get around these problems.
 
 See also:
-- [Opentrons API Version 2 Reference](https://docs.opentrons.com/v2/new_protocol_api.html)
-- [Opentrons comprehensive user guide](https://insights.opentrons.com/hubfs/Products/OT-2/OT-2R%20User%20Manual%20V1.0.pdf?_gl=1*19jxt1n*_ga*MjEzMDcwMDU2MS4xNjY3NTY2OTg3*_ga_66HK7MC5D7*MTY3OTkyNjM2NC41LjAuMTY3OTkyNjM2NC42MC4wLjA.*_ga_GNSMNLW4RY*MTY3OTkyNjM2NC40My4wLjE2Nzk5MjYzNjQuNjAuMC4w)
+- **[Opentrons API Version 2 Reference](https://docs.opentrons.com/v2/new_protocol_api.html)**
+- **[Opentrons comprehensive user guide](https://insights.opentrons.com/hubfs/Products/OT-2/OT-2R%20User%20Manual%20V1.0.pdf?_gl=1*19jxt1n*_ga*MjEzMDcwMDU2MS4xNjY3NTY2OTg3*_ga_66HK7MC5D7*MTY3OTkyNjM2NC41LjAuMTY3OTkyNjM2NC42MC4wLjA.*_ga_GNSMNLW4RY*MTY3OTkyNjM2NC40My4wLjE2Nzk5MjYzNjQuNjAuMC4w)** (.docx)
 
-**Contents**
+
+## Contents
 - [Liquid handling](#liquid-handling)
   - [Viscous liquids](#viscous-liquids)
   - [Robot skips wells](#robot-is-skipping-wells-when-dispensing)
@@ -18,8 +19,12 @@ See also:
 ### Viscous liquids
 Generally, issues with viscous liquids can be solved by using building block commands to access additional pipetting parameters.
 
+#### Opentrons webinar
 For an in-depth guide that covers this topic (more so than what is available below), view Opentrons' webinar about the topic:
 - **[Viscous and volatile liquid handling](https://insights.opentrons.com/lp/webinar-01-11-23-tips-and-tricks-viscous-liquids-typ?submissionGuid=8d793e68-d66e-499f-9713-9c2d932e8856)** - includes code snippets (defining functions for repeat transfer of liquids)
+![image](https://user-images.githubusercontent.com/119699492/228332276-c4ec9eed-4119-4e54-a627-eac56bbb5ac4.png)
+![image](https://user-images.githubusercontent.com/119699492/228573374-ab40ed4d-1d8a-4f38-9574-7c72d7468aaa.png)
+
 
 #### Liquid isn't dispensing completely, or air bubbles are present when aspirating
 `InstrumentContext.aspirate()` and `InstrumentContext.dispense()` can take an additional argument that specifies a rate multiplier. See the bottom of Opentrons API v2's [Pipettes reference page](https://docs.opentrons.com/v2/new_pipette.html) for default speeds.
@@ -48,6 +53,20 @@ for i in range(3):
 p300.dispense(100, rack['A2'])
 p300.drop_tip()
 ```
+
+#### Large droplets present on pipette tip after dispensing
+If droplets are still present after dispensing, but before the blowout step, dispenses can be adjusted such that the pipette tip is touching the side of the destination well during the dispense step.
+```python
+p300.pick_up_tip()
+p300.aspirate(100, rack['A1'])
+
+p300.dispense(
+  100,
+  rack['A2'].top().move(types.point(x,y,z))
+) 
+```
+![image](https://user-images.githubusercontent.com/119699492/228574261-4521577d-c851-40c7-ac14-537117f60a42.png)
+
 
 ### Robot is skipping wells when dispensing
 Make sure the volume being dispensed is reasonable. Disregarding Opentrons recommendations, the P300 seems to be able to pipette as little as 10uL at a time; when pipetting 5uL, liquid would randomly fail to be dispensed into some wells. Adjust pipetting steps and reagent concentrations to avoid pipetting volumes that are too small.
@@ -90,7 +109,7 @@ When using building block commands, every step of liquid handling must be specif
 
 ```python
 p300.pick_up_tip()
-p300.aspirate(100, rack['A1])
+p300.aspirate(100, rack['A1'])
 p300.dispense(100, rack['A2'])
 p300.drop_tip()
 ```
@@ -98,7 +117,7 @@ p300.drop_tip()
 `InstrumentContext.dispense()` provides powerful additional argument options, but lacks the multi-dispense function offered by complex commands like
 `InstrumentContext.transfer()` and `InstrumentContext.distribute()`. To get around this, we have to get creative with nested loops.
 
-Within well plates, Opentrons organizes wells by column, then by row. For example, wells 1-16 on a 384-well plate are wells A1 through P1; well A2 is number 17, well A3 is number 33, and so on. The following code example (from [8x8 Primer Screen](2022-11-17_8x8primerScreen.py)) fills the top half of a 384-well plate. Because of Opentrons' well organization system, this code iterates through pairs of columns instead of rows, as this allows for a nested loop that accesses each well within a column. Pairs of columns are used here to minimize aspirations while still maintaining simple loop logic.
+Within well plates, Opentrons organizes wells by column, then by row. For example, wells 0-15 on a 384-well plate are wells A1 through P1; well A2 is number 16, well A3 is number 32, and so on. The following code example (from [8x8 Primer Screen](2022-11-17_8x8primerScreen.py)) fills the top half of a 384-well plate. Because of Opentrons' well organization system, this code iterates through pairs of columns instead of rows, as this allows for a nested loop that accesses each well within a column. Pairs of columns are used here to minimize aspirations while still maintaining simple loop logic.
 ```python
     p300.pick_up_tip()
     for column in range(12):
