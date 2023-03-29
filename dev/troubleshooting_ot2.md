@@ -20,12 +20,11 @@ See also:
 Generally, issues with viscous liquids can be solved by using building block commands to access additional pipetting parameters.
 
 #### Opentrons webinar
-For an in-depth guide that covers this topic (more so than what is available below), view Opentrons' webinar about the topic:
-- **[Viscous and volatile liquid handling](https://insights.opentrons.com/lp/webinar-01-11-23-tips-and-tricks-viscous-liquids-typ?submissionGuid=8d793e68-d66e-499f-9713-9c2d932e8856)** - includes code snippets (defining functions for repeat transfer of liquids)
+For in-depth guides that cover this topic (more so than what is available below), view Opentrons' resources about the topic:
+- **[Webinar: Viscous and volatile liquid handling](https://insights.opentrons.com/lp/webinar-01-11-23-tips-and-tricks-viscous-liquids-typ?submissionGuid=8d793e68-d66e-499f-9713-9c2d932e8856)** - includes code snippets (defining functions for repeat transfer of liquids)
+- **[Support: Viscous liquid handling with Python API](https://support.opentrons.com/s/article/How-to-handle-viscous-liquids-in-the-Python-API)**
+- **[PDF: Viscous liquid handling using the OT-2](https://opentrons-landing-img.s3.amazonaws.com/application+notes/Viscous+Liquids+App+Note.pdf)**
 - Note that Opentrons does not recommend using multi-dispense functionality with viscous liquids, as this can lead to inconsistent dispenses.
-![image](https://user-images.githubusercontent.com/119699492/228332276-c4ec9eed-4119-4e54-a627-eac56bbb5ac4.png)
-![image](https://user-images.githubusercontent.com/119699492/228573374-ab40ed4d-1d8a-4f38-9574-7c72d7468aaa.png)
-
 
 #### Liquid isn't dispensing completely, or air bubbles are present when aspirating
 `InstrumentContext.aspirate()` and `InstrumentContext.dispense()` can take an additional argument that specifies a rate multiplier. See the bottom of Opentrons API v2's [Pipettes reference page](https://docs.opentrons.com/v2/new_pipette.html) for default speeds.
