@@ -22,6 +22,7 @@ Generally, issues with viscous liquids can be solved by using building block com
 #### Opentrons webinar
 For an in-depth guide that covers this topic (more so than what is available below), view Opentrons' webinar about the topic:
 - **[Viscous and volatile liquid handling](https://insights.opentrons.com/lp/webinar-01-11-23-tips-and-tricks-viscous-liquids-typ?submissionGuid=8d793e68-d66e-499f-9713-9c2d932e8856)** - includes code snippets (defining functions for repeat transfer of liquids)
+- Note that Opentrons does not recommend using multi-dispense functionality with viscous liquids, as this can lead to inconsistent dispenses.
 ![image](https://user-images.githubusercontent.com/119699492/228332276-c4ec9eed-4119-4e54-a627-eac56bbb5ac4.png)
 ![image](https://user-images.githubusercontent.com/119699492/228573374-ab40ed4d-1d8a-4f38-9574-7c72d7468aaa.png)
 
