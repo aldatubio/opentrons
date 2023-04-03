@@ -48,7 +48,7 @@ def run(protocol: protocol_api.ProtocolContext):
 
     # multiplier
     # increase by 1 = increase number of plates prepped by 1
-    p = 2
+    p = 4
 
     # deck setup
     p300tips = protocol.load_labware('opentrons_96_filtertiprack_200ul', 3)
