@@ -1,9 +1,12 @@
-# Troubleshooting
+# Troubleshooting Opentrons
 This guide contains code snippets and script references for problems we've encountered in the past (hardware and software) and the software solutions we used to fix or get around these problems.
 
-See also: [Opentrons API Version 2 Reference](https://docs.opentrons.com/v2/new_protocol_api.html)
+See also:
+- **[Opentrons API Version 2 Reference](https://docs.opentrons.com/v2/new_protocol_api.html)**
+- **[Opentrons comprehensive user guide](https://insights.opentrons.com/hubfs/Products/OT-2/OT-2R%20User%20Manual%20V1.0.pdf?_gl=1*19jxt1n*_ga*MjEzMDcwMDU2MS4xNjY3NTY2OTg3*_ga_66HK7MC5D7*MTY3OTkyNjM2NC41LjAuMTY3OTkyNjM2NC42MC4wLjA.*_ga_GNSMNLW4RY*MTY3OTkyNjM2NC40My4wLjE2Nzk5MjYzNjQuNjAuMC4w)** (.docx)
 
-**Contents**
+
+## Contents
 - [Liquid handling](#liquid-handling)
   - [Viscous liquids](#viscous-liquids)
   - [Robot skips wells](#robot-is-skipping-wells-when-dispensing)
@@ -15,6 +18,13 @@ See also: [Opentrons API Version 2 Reference](https://docs.opentrons.com/v2/new_
 ## Liquid handling
 ### Viscous liquids
 Generally, issues with viscous liquids can be solved by using building block commands to access additional pipetting parameters.
+
+#### Opentrons-provided resources
+For in-depth guides that provide a multitude of fixes for volatile and viscous liquid handling, check out the links below. 
+- **[Webinar: Viscous and volatile liquid handling](https://insights.opentrons.com/lp/webinar-01-11-23-tips-and-tricks-viscous-liquids-typ?submissionGuid=8d793e68-d66e-499f-9713-9c2d932e8856)** - includes code snippets (defining functions for repeat transfer of liquids)
+- **[Support: Viscous liquid handling with Python API](https://support.opentrons.com/s/article/How-to-handle-viscous-liquids-in-the-Python-API)**
+- **[PDF: Viscous liquid handling using the OT-2](https://opentrons-landing-img.s3.amazonaws.com/application+notes/Viscous+Liquids+App+Note.pdf)** - includes example code blocks, some of which are described in further detail below
+- Note that Opentrons does not recommend using multi-dispense functionality with viscous liquids, as this can lead to inconsistent dispenses.
 
 #### Liquid isn't dispensing completely, or air bubbles are present when aspirating
 `InstrumentContext.aspirate()` and `InstrumentContext.dispense()` can take an additional argument that specifies a rate multiplier. See the bottom of Opentrons API v2's [Pipettes reference page](https://docs.opentrons.com/v2/new_pipette.html) for default speeds.
@@ -44,8 +54,64 @@ p300.dispense(100, rack['A2'])
 p300.drop_tip()
 ```
 
+#### Large droplets present on pipette tip after dispensing
+- If droplets are still present after dispensing, but before the blowout step, dispenses can be adjusted such that the pipette tip is touching the side of the destination well during the dispense step (visualized below).
+- If droplets are still present after the blowout step, blowout speed can be reduced to ensure full elimination of any residual liquid. 
+<p align = 'center'>
+  <img src="https://user-images.githubusercontent.com/119699492/228574261-4521577d-c851-40c7-ac14-537117f60a42.png" width="782" height="357">
+</p>
+
+The code snippet below shows the use of both of these techniques to aspirate 100uL of liquid from a tube in A1 of a rack and dispense the liquid into A2 of the same rack. Note:
+- In order to adjust tip location within a well using `types.Point(x,y,z)`, the import statement `from opentrons.types import Point` must be present at the top of the script.
+- `InstrumentContext.blow_out()` does not take a rate modifier argument. Therefore, the blowout rate of the pipette itself must be changed, then changed back to its original value after blowout.
+```python
+from opentrons import protocol_api
+from opentrons.types import Point
+
+metadata = {
+    'apiLevel': '2.13'
+}
+
+def run(protocol: protocol_api.ProtocolContext):
+    
+    protocol.home()
+    
+    p300tips = protocol.load_labware('opentrons_96_filtertiprack_200ul',3, 'tip rack')
+    rack = protocol.load_labware('opentrons_24_tuberack_eppendorf_1.5ml_safelock_snapcap',2, 'tube rack')
+    
+    p300 = protocol.load_instrument('p300_single_gen2', 'left', tip_racks = [p300tips])
+    
+    p300.pick_up_tip()
+    p300.aspirate (
+        100,
+        rack['A1'],
+        rate = 1.05     # 1.05x default rate
+        )
+    protocol.delay(20)
+    p300.dispense(
+        100,
+        rack['A2'].top()                                # from default dispense location,
+            .move(Point(x=(rack['A2'].diameter/2-1))),  # move 1 radius minus 1 mm in the x direction
+        rate = 0.05                                     # 1/20th of default rate
+        )
+    
+    # first, save the default blowout rate in a new variable
+    default_p300_blowout = p300.flow_rate.blow_out
+    # lower the blowout rate
+    p300.flow_rate.blow_out = 10 #uL/s
+    # blowout step 
+    p300.blow_out()
+    # change blowout rate back to saved default 
+    p300.flow_rate.blow_out = default_p300_blowout
+    
+    
+    p300.drop_tip()
+    
+    protocol.home()
+ ```
+
 ### Robot is skipping wells when dispensing
-Make sure the volume being dispensed is reasonable. Disregarding Opentrons recommendations, the P300 seems to be able to pipette as little as 10uL at a time; when pipetting 5uL, liquid would randomly fail to be dispensed into some wells. Adjust pipetting steps and reagent concentrations to avoid pipetting volumes that are too small.
+Ensure the volume being dispensed is reasonable. Disregarding Opentrons recommendations, the P300 seems to be able to pipette as little as 10uL at a time; when pipetting 5uL, liquid randomly fails to be dispensed into some wells. Adjust pipetting steps and reagent concentrations to avoid pipetting volumes that are too small.
 
 ## Robot is using more tips than necessary
 `InstrumentContext.distribute()` allows the user to specify when to get a new tip - `'never'` is a valid argument, but make sure that if you choose this, you're using `InstrumentContext.pick_up_tip()` and `InstrumentContext.drop_tip()` before and after distributing liquid.
@@ -85,7 +151,7 @@ When using building block commands, every step of liquid handling must be specif
 
 ```python
 p300.pick_up_tip()
-p300.aspirate(100, rack['A1])
+p300.aspirate(100, rack['A1'])
 p300.dispense(100, rack['A2'])
 p300.drop_tip()
 ```
@@ -93,7 +159,7 @@ p300.drop_tip()
 `InstrumentContext.dispense()` provides powerful additional argument options, but lacks the multi-dispense function offered by complex commands like
 `InstrumentContext.transfer()` and `InstrumentContext.distribute()`. To get around this, we have to get creative with nested loops.
 
-Within well plates, Opentrons organizes wells by column, then by row. For example, wells 1-16 on a 384-well plate are wells A1 through P1; well A2 is number 17, well A3 is number 33, and so on. The following code example (from [8x8 Primer Screen](2022-11-17_8x8primerScreen.py)) fills the top half of a 384-well plate. Because of Opentrons' well organization system, this code iterates through pairs of columns instead of rows, as this allows for a nested loop that accesses each well within a column. Pairs of columns are used here to minimize aspirations while still maintaining simple loop logic.
+Within well plates, Opentrons organizes wells by column, then by row. For example, wells 0-15 on a 384-well plate are wells A1 through P1; well A2 is number 16, well A3 is number 32, and so on. The following code example (from [8x8 Primer Screen](2022-11-17_8x8primerScreen.py)) fills the top half of a 384-well plate. Because of Opentrons' well organization system, this code iterates through pairs of columns instead of rows, as this allows for a nested loop that accesses each well within a column. Pairs of columns are used here to minimize aspirations while still maintaining simple loop logic.
 ```python
     p300.pick_up_tip()
     for column in range(12):

@@ -1,8 +1,11 @@
-# Developer references
+# Using Git and command-line interfaces
 
 ## Guides and references
 - **[Git Immersion](https://gitimmersion.com/index.html)** - Git fundamentals tutorial
 - **[Push commits to an additional Git repository](https://docs.aws.amazon.com/codecommit/latest/userguide/how-to-mirror-repo-pushes.html)**
+
+## Opentrons webinars
+- **[Viscous and volatile liquid handling](https://insights.opentrons.com/lp/webinar-01-11-23-tips-and-tricks-viscous-liquids-typ?submissionGuid=8d793e68-d66e-499f-9713-9c2d932e8856)** - includes code snippets (defining functions for repeat transfer of liquids)
 
 ## Quick answers to coding questions and troubleshooting links
 - **[How do I rename an existing Git remote?](https://support.beanstalkapp.com/article/16-how-do-i-rename-an-existing-git-remote)**
