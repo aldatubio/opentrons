@@ -48,7 +48,13 @@ def run(protocol: protocol_api.ProtocolContext):
 
     # multiplier
     # increase by 1 = increase number of plates prepped by 1
-    p = 4
+    # NOTE: multiplier >2 may result in cross-contamination
+    # (if entire volume to be added is greater than 200uL,
+    #  Opentrons will double-dip - for example:
+    #  add 200uL, mix, then go back to source well with same tip
+    #  and transfer an additional 40uL, then mix again).
+    # Use multiplier >2 at your own risk.
+    p = 2
 
     # deck setup
     p300tips = protocol.load_labware('opentrons_96_filtertiprack_200ul', 3)
