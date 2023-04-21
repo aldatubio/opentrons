@@ -26,10 +26,7 @@ metadata = {
     'apiLevel': '2.14',
     'protocolName': '434/577 Various Probes',
     'author': 'OP13 LL',
-    'description': '''For use in 7B10 robot. | 
-                   LIQUID SETUP [1.5mL tubes]:
-                   A1-4 = 10X forward-reverse primer mixes,
-                   D1-6 = 10X probes.'''
+    'description': 'For use in 7B10 robot.'
 }
 
 def run(protocol: protocol_api.ProtocolContext):
@@ -55,13 +52,52 @@ def run(protocol: protocol_api.ProtocolContext):
     p20 = protocol.load_instrument('p20_single_gen2', 'right', tip_racks=[p20tips])
 
    # liquid definitions - to create layout map with labels/colors
-    fwd434Orig = protocol.define_liquid('434 Forward - Original PANDAA','Primer','#0700c4')
-    fwd434ADR = protocol.define_liquid('434 Forward - ADRd1','Primer','#00f')
-    fwd434PDR = protocol.define_liquid('434 Forward - Short PDR','Primer', '#0052ff')
+    fwd434 = protocol.define_liquid(
+            '434 Forward Primers',
+            'Original PANDAA, ADRd1, or shortened PDR design',
+            '#0700c4'
+    )
 
-    reservoir['A1'].load_liquid(fwd434Orig,100)
-    reservoir['A2'].load_liquid(fwd434ADR,100)
-    reservoir['A3'].load_liquid(fwd434PDR,100)
+    rev434 = protocol.define_liquid(
+            '434 Reverse Primers',
+            'Original PANDAA, ADRd1, or shortened PDR design',
+            '#00a3ff'
+    )
+    
+    probe434 = protocol.define_liquid(
+        '434 Probes',
+        '12.F.1 and 14.F.1',
+        '#00ccff'
+    )
+
+    fwd577 = protocol.define_liquid(
+            '577 Forward Primers',
+            'Original PANDAA, ADRd1, or shortened PDR design',
+            '#c61a09'
+    )
+
+    rev577 = protocol.define_liquid(
+            '577 Reverse Primers',
+            'Original PANDAA, ADRd1, or shortened PDR design',
+            '#ff6242'
+    )
+    
+    probe577 = protocol.define_liquid(
+        '577 Probes',
+        '11.F.1 and 15.F.1',
+        '#ed3419'
+    )
+
+    for i in range(3):
+        for j in range(2):
+            reservoir[str(chr(j+65))+str(i+1)].load_liquid(fwd434, 100)
+            reservoir[str(chr(j+65))+str(i+4)].load_liquid(fwd577, 100)
+            reservoir[str(chr(j+67))+str(i+1)].load_liquid(rev434, 100)
+            reservoir[str(chr(j+67))+str(i+4)].load_liquid(rev577, 100)
+
+    for i in range(2):
+        probes['D'+str(2*i+1)].load_liquid(probe434, 100)
+        probes['D'+str(2*i+2)].load_liquid(probe577, 100)
 
 
     # 1. FORWARD PRIMERS
