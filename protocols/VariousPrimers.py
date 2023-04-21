@@ -96,8 +96,8 @@ def run(protocol: protocol_api.ProtocolContext):
             reservoir[str(chr(j+67))+str(i+4)].load_liquid(rev577, 100)
 
     for i in range(2):
-        probes['D'+str(2*i+1)].load_liquid(probe434, 100)
-        probes['D'+str(2*i+2)].load_liquid(probe577, 100)
+        probes['D'+str(i+1)].load_liquid(probe434, 100)
+        probes['D'+str(i+3)].load_liquid(probe577, 100)
 
 
     # 1. FORWARD PRIMERS
