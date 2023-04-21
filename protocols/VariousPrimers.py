@@ -55,9 +55,9 @@ def run(protocol: protocol_api.ProtocolContext):
     p20 = protocol.load_instrument('p20_single_gen2', 'right', tip_racks=[p20tips])
 
    # liquid definitions - to create layout map with labels/colors
-    fwd434Orig = protocol.define_liquid('434 Forward - Original PANDAA',display_color = '#0700c4')
-    fwd434ADR = protocol.define_liquid('434 Forward - ADRd1',display_color = '#00f')
-    fwd434PDR = protocol.define_liquid('434 Forward - Short PDR',display_color = '#0052ff')
+    fwd434Orig = protocol.define_liquid('434 Forward - Original PANDAA','Primer','#0700c4')
+    fwd434ADR = protocol.define_liquid('434 Forward - ADRd1','Primer','#00f')
+    fwd434PDR = protocol.define_liquid('434 Forward - Short PDR','Primer', '#0052ff')
 
     reservoir['A1'].load_liquid(fwd434Orig,100)
     reservoir['A2'].load_liquid(fwd434ADR,100)
