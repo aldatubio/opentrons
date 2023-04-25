@@ -1,11 +1,11 @@
 # Various Primers | Variation on Primer Selection Protocol
-# Updated 2023-04-21
+# Updated 2023-04-24
 # Author: OP13 LL
 # 
 # Purpose: plate primer pairs and probes on a 384-well plate
 #          such that each of 14 probes is tested with 3 primer pairs.
 # 
-# Execution: This script fills the first 12 rows of a 384-well plate [columns 1-18] as follows:
+# Execution: THIS SCRIPT IS NOT COMPLETE. SEE SECTION WITH FOUR #### LINES FOR END OF COMPLETE CODE.
 #      
 # Reaction [total 6µL per well]:
 #  - 2µL 10X forward primer
