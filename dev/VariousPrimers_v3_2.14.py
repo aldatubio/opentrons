@@ -391,7 +391,7 @@ def run(protocol: protocol_api.ProtocolContext):
             for k in range(3):
                 j = 0
                 while j < 15:                                         # wells 0-14 - equivalent to rows A-N
-                    list.append((j+96) + (k*16) + (h*48) + (i*288))   # j+96 = row [start in col 7], k*16 = column, h*48 = which probe, i*96 = 434 or 577 section of plate
+                    list.append((j+96) + (k*16) + (h*48) + (i*96))   # j+96 = row [start in col 7], k*16 = column, h*48 = which probe, i*96 = 434 or 577 section of plate
                     j += 1
                     if j == 7:  
                         j = 8                           # skip row H
