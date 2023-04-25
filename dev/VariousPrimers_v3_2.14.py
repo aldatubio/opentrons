@@ -374,6 +374,7 @@ def run(protocol: protocol_api.ProtocolContext):
                 new_tip = 'never',
                 touch_tip = True
             )
+            p20.drop_tip()
 
     ########################################################################################
     ########################################################################################
@@ -403,5 +404,6 @@ def run(protocol: protocol_api.ProtocolContext):
                 new_tip = 'never',
                 touch_tip = True
             )
+            p20.drop_tip()
     
     protocol.home()
