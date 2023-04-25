@@ -3,9 +3,7 @@
 # Author: OP13 LL
 # 
 # Purpose: plate primer pairs and probes on a 384-well plate
-#          such that each of 14 probes is tested with 3 primer pairs.
-# 
-# Execution: THIS SCRIPT IS NOT COMPLETE. SEE SECTION WITH FOUR #### LINES FOR END OF COMPLETE CODE.
+#          such that each of 6 probes is tested with 6-7 different primer pairs.
 #      
 # Reaction [total 6µL per well]:
 #  - 2µL 10X forward primer
@@ -13,18 +11,18 @@
 #  - 2µL 10X probe
 #  
 # Deck setup:
-#  - 1: 24-count 1.5mL snap cap tube rack, with tubes as follows:
-#       - tubes A1-4: 10X forward-reverse primer mixes
-#       - tubes D1-6: 10X probes
+#  - 4, 5, 6: 24-count 1.5mL snap-cap tube rack with forward primers, reverse primers, and probes, respectively
 #  - 2: Applied Biosystems 384-well MicroAmp plate
-#  - 3: 96-count 20µL tip rack (protocol uses 10 tips)
+#  - 3: 96-count 20µL tip rack
+#
+# Note: this version of the protocol still includes the 586 region in columns 19-24 of the plate.
 
 
 from opentrons import protocol_api
 
 metadata = {
     'apiLevel': '2.13',
-    'protocolName': '434/577 Various Probes v3',
+    'protocolName': '422/434/577 Various Primers v3',
     'author': 'OP13 LL',
     'description': 'For use in 7B10 robot. See plate map; order of primers in each column is the order they should be loaded into tube rack rows.'
 }
