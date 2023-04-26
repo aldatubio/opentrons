@@ -206,10 +206,6 @@ def run(protocol: protocol_api.ProtocolContext):
         )
         p20.drop_tip()
 
-
-#############################################################
-# NEEDS EDITS BELOW THIS POINT
-#############################################################
     ########################################################################################
     ########################################################################################
     # 2A. REVERSE PRIMERS - 422
@@ -221,14 +217,14 @@ def run(protocol: protocol_api.ProtocolContext):
     ########
     # 422 - 3 primers
     list = []                                           # 458.R.1 - first primer
-    for j in range(6):                                  # columns 1-6 [for 422 region]; columns 19-24 [586 region]
+    for j in range(6):                                  # columns 1-6
         for k in range(2):                              # top vs bottom half of plate
-            list.append( (j*16)    + (k*8) + (i*288))   # row A/I. i multiplier: move to column 19 (16*18) for 586 region
-            list.append(((j*16)+2) + (k*8) + (i*288))   # row C/K. k multiplier: when k=1, move to bottom half of plate
+            list.append( (j*16)    + (k*8))             # row A/I
+            list.append(((j*16)+2) + (k*8))             # row C/K. k multiplier: when k=1, move to bottom half of plate
     p20.pick_up_tip()
     p20.distribute(
         volume,
-        revprimers[row+'1'],                  # first primer is in first slot of the row
+        revprimers['A1'],                  # first primer is in first slot of the row
         [plate.wells()[wellIndex] for wellIndex in list],
         new_tip = 'never',
         touch_tip = True
@@ -238,13 +234,13 @@ def run(protocol: protocol_api.ProtocolContext):
     list = []                                 # 458.R.1.Ad2 - second primer
     for j in range(6):
         for k in range(2):
-            list.append(((j*16)+1) + (k*8) + (i*288))   # row B/J
-            list.append(((j*16)+3) + (k*8) + (i*288))   # row D/L
-            list.append(((j*16)+5) + (k*8) + (i*288))   # row F/N
+            list.append(((j*16)+1) + (k*8))   # row B/J
+            list.append(((j*16)+3) + (k*8))   # row D/L
+            list.append(((j*16)+5) + (k*8))   # row F/N
     p20.pick_up_tip()
     p20.distribute(
         volume,
-        revprimers[row+'2'],                  
+        revprimers['A2'],                  
         [plate.wells()[wellIndex] for wellIndex in list],
         new_tip = 'never',
         touch_tip = True
@@ -254,11 +250,11 @@ def run(protocol: protocol_api.ProtocolContext):
     list = []                                 # 458.R.1.Ad1 - third primer
     for j in range(6):
         for k in range(2):
-            list.append(((j*16)+4) + (k*8) + (i*288))   # row E/M
+            list.append(((j*16)+4) + (k*8))   # row E/M
     p20.pick_up_tip()
     p20.distribute(
         volume,
-        revprimers[row+'3'],                  
+        revprimers['A3'],                  
         [plate.wells()[wellIndex] for wellIndex in list],
         new_tip = 'never',
         touch_tip = True
@@ -337,33 +333,28 @@ def run(protocol: protocol_api.ProtocolContext):
    
     ########################################################################################
     ########################################################################################
-    # 3A. PROBES - 422/586
+    # 3A. PROBES - 422
     # 6 primer conditions
 
-    for i in range(2):                                  # 422 or 586
-        if i == 0:
-            row = 'A'
-        else:
-            row = 'D'
-        for h in range(2):                              # short or long probe within each region
-            list = []
-            for k in range(3):
-                j = 0
-                while j < 14:                                    # wells 0-13 - equivalent to rows A-N
-                    list.append(j + (k*16) + (h*48) + (i*288))   # j = row, k*16 = column, h*48 = which probe, i*288 = 422 or 586 section of plate
-                    j += 1
-                    if j == 6:  
-                        j = 8                           # skip rows G and H
-            list.sort()
-            p20.pick_up_tip()
-            p20.distribute(
-                volume,
-                probes[row+str(h+1)],
-                [plate.wells()[wellIndex] for wellIndex in list],
-                new_tip = 'never',
-                touch_tip = True
-            )
-            p20.drop_tip()
+    for h in range(2):                              # short or long probe
+        list = []
+        for k in range(3):
+            j = 0
+            while j < 14:                          # wells 0-13 - equivalent to rows A-N
+                list.append(j + (k*16) + (h*48))   # j = row, k*16 = column, h*48 = which probe
+                j += 1
+                if j == 6:  
+                    j = 8                           # skip rows G and H
+        list.sort()
+        p20.pick_up_tip()
+        p20.distribute(
+            volume,
+            probes['A'+str(h+1)],
+            [plate.wells()[wellIndex] for wellIndex in list],
+            new_tip = 'never',
+            touch_tip = True
+        )
+        p20.drop_tip()
 
     ########################################################################################
     ########################################################################################
