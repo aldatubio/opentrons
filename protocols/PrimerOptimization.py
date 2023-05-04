@@ -97,7 +97,7 @@ def run(protocol: protocol_api.ProtocolContext):
             60*p,
             tubes['B1'],
             tubes['A'+str(i+2)],
-            mix_after = (4, 80)
+            mix_after = (4, 80*p)
         )
 
 
