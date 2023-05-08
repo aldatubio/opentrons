@@ -33,12 +33,12 @@ from opentrons import protocol_api
 
 metadata = {
     'apiLevel': '2.13',
-    'protocolName': 'Primer Optimization | updated 2023-01-24',
+    'protocolName': 'Primer Optimization | prepares 1 plate',
     'author': 'OP13 LL',
     'description': '''Performs dilutions for primer optimization. || 
                     TUBE SETUP: 5mL screw-cap tube of water in slot A5 of large tube rack;
                     in small tube rack,
-                    1.5mL snap-cap tubes with 250µL of primers (A1: forward, B1: reverse);
+                    1.5mL snap-cap tubes with 250µL of primers (A1: 500nM, B1: 1µM);
                     and 16 empty 1.5mL snap-cap tubes in slots A2-D5.'''
 }
 
@@ -54,7 +54,7 @@ def run(protocol: protocol_api.ProtocolContext):
     #  add 200uL, mix, then go back to source well with same tip
     #  and transfer an additional 40uL, then mix again).
     # Use multiplier >2 at your own risk.
-    p = 2
+    p = 1
 
     # deck setup
     p300tips = protocol.load_labware('opentrons_96_filtertiprack_200ul', 3)
