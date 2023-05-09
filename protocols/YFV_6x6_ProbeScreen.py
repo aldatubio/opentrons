@@ -61,7 +61,7 @@ def run(protocol: protocol_api.ProtocolContext):
     plate = protocol.load_labware('appliedbiosystemsmicroamp_384_wellplate_40ul', 2)
 
     # pipette initialization/setup
-    p20 = protocol.load_instrument('p20_single_gen2', 'right', tip_racks=[p20tips])
+    p20 = protocol.load_instrument('p20_single_gen2', 'left', tip_racks=[p20tips])
 
 
     # 1. PRIMER PAIRS

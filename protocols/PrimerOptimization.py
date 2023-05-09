@@ -63,7 +63,7 @@ def run(protocol: protocol_api.ProtocolContext):
     water = protocol.load_labware('usascientific_15_tuberack_5000ul', 1)
 
     # pipette initialization
-    p300 = protocol.load_instrument('p300_single_gen2', 'left', tip_racks=[p300tips])
+    p300 = protocol.load_instrument('p300_single_gen2', 'right', tip_racks=[p300tips])
 
 
     #################################################

@@ -1,5 +1,5 @@
 # # Primer Evaluation | Plating Primers
-# **Updated 2023-01-03** <br>
+# **Updated 2023-05-09** <br>
 # **Author: OP13 LL**
 # 
 # **Purpose:** Plate 64 primer pairs in triplicate on a 384-well plate. <br>
@@ -35,7 +35,7 @@ from opentrons import protocol_api
 
 metadata = {
     'apiLevel': '2.13',
-    'protocolName': 'Primer Evaluation | Primer Plating | updated 2023-01-04',
+    'protocolName': 'Primer Evaluation | Primer Plating',
     'author': 'OP13 LL',
     'description': '''For use in 7B10 robot. | 
                         LIQUID SETUP:
@@ -62,7 +62,7 @@ def run(protocol: protocol_api.ProtocolContext):
     plate = protocol.load_labware('appliedbiosystemsmicroamp_384_wellplate_40ul', 2)
 
     # pipette initialization/setup
-    p20 = protocol.load_instrument('p20_single_gen2', 'right', tip_racks=[p20tips])
+    p20 = protocol.load_instrument('p20_single_gen2', 'left', tip_racks=[p20tips])
 
 
     # 1. FORWARD PRIMERS | 15 min
