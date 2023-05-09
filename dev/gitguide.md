@@ -15,4 +15,4 @@
 - **[Push git changes to a shared network drive](https://stackoverflow.com/questions/11635493/push-git-changes-to-a-shared-network-drive)** (StackOverflow)
 - **[Make an existing Git branch track a remote branch](https://stackoverflow.com/questions/520650/make-an-existing-git-branch-track-a-remote-branch)**
 - **[Renaming or moving files with the mv command](https://www.educative.io/answers/how-to-rename-or-move-files-in-git)**
-- **[Terminating processes in Git Bash]**(https://github.com/microsoft/node-pty/issues/7#issuecomment-382612214) (tldr: use command `stty echo` to turn keyboard echo back on)
+- **[Terminating processes in Git Bash](https://github.com/microsoft/node-pty/issues/7#issuecomment-382612214)** - use command `stty echo` to turn keyboard echo back on
