@@ -1,5 +1,5 @@
 # Primer Optimization
-# Updated 2023-01-24
+# Updated 2023-05-12
 # Author: OP13 LL
 #
 # Purpose: Prepare dilution series of one forward and one reverse primer,
@@ -33,7 +33,7 @@ from opentrons import protocol_api
 
 metadata = {
     'apiLevel': '2.13',
-    'protocolName': 'Primer Optimization | prepares 2 plates',
+    'protocolName': 'Primer Optimization | prepares 1 plate',
     'author': 'OP13 LL',
     'description': '''Performs dilutions for primer optimization. || 
                     TUBE SETUP: 5mL screw-cap tube of water in slot A5 of large tube rack;
@@ -54,7 +54,7 @@ def run(protocol: protocol_api.ProtocolContext):
     #  add 200uL, mix, then go back to source well with same tip
     #  and transfer an additional 40uL, then mix again).
     # Use multiplier >2 at your own risk.
-    p = 2
+    p = 1
 
     # deck setup
     p300tips = protocol.load_labware('opentrons_96_filtertiprack_200ul', 3)
