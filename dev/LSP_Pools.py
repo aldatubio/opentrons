@@ -22,9 +22,9 @@ def run(protocol: protocol_api.ProtocolContext):
     
     protocol.home()
 
-    p300tips = protocol.load_labware('opentrons_96_filtertiprack_200ul', 4, 'Tip Rack')
+    p300tips = protocol.load_labware('opentrons_96_filtertiprack_200ul', 3, 'Tip Rack')
     plate = protocol.load_labware('appliedbiosystemsmicroamp_384_wellplate_40ul', 2, 'Plate')
-    rack = protocol.load_labware('opentrons_24_tuberack_eppendorf_1.5ml_safelock_snapcap', 3, 'Master Mixes')
+    rack = protocol.load_labware('opentrons_24_tuberack_eppendorf_1.5ml_safelock_snapcap', 4, 'Master Mixes')
 
     p300 = protocol.load_instrument('p300_single_gen2', 'right', tip_racks=[p300tips])
 
