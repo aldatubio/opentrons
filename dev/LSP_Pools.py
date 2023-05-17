@@ -11,7 +11,9 @@ metadata = {
     'apiLevel': '2.13',
     'protocolName': 'Lineage-Specific Primer Pools | MM Plating',
     'author': 'OP13 LL',
-    'description': 'Plates master mix for lineage-specific primer pool evaluations.'
+    'description': '''Plates master mix for lineage-specific primer pool evaluations. | 
+                        Place completed 2x mastermixes [1-5] in slots A1-A5 of tube rack.
+                        Mastermixes are added to plate: top left, top right, bottom left, bottom right, bottom "center."'''
 }
 
 def run(protocol: protocol_api.ProtocolContext):
