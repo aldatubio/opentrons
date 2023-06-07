@@ -57,7 +57,8 @@ def run(protocol: protocol_api.ProtocolContext):
                 volume,
                 rack['A'+str(tube_number)],
                 [plate.wells()[wellIndex] for wellIndex in list],
-                new_tip = 'never'
+                new_tip = 'never',
+                disposal_volume = 10
             )
 
             p300.drop_tip()
