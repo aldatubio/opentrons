@@ -25,7 +25,7 @@ def run(protocol: protocol_api.ProtocolContext):
     
     plateDict = {}
     for i in range(number_of_plates):
-        plateDict[str(i)] = protocol.load_labware('thermo_96_well_endura_0.1ml', i, 'Plate '+str(i))
+        plateDict[str(i+1)] = protocol.load_labware('thermo_96_well_endura_0.1ml', i+1, 'Plate '+str(i))
 
     if number_of_plates > 1:
         rack = protocol.load_labware('usascientific_15_tuberack_5000ul', 4, 'MM: Plates > 1')
@@ -50,7 +50,7 @@ def run(protocol: protocol_api.ProtocolContext):
         p300.distribute(
             volume,
             rack['A1'],
-            [plateDict[str(i)].wells()[wellIndex] for wellIndex in ARC_wells],
+            [plateDict[str(i+1)].wells()[wellIndex] for wellIndex in ARC_wells],
             disposal_volume = 10
         )
 
