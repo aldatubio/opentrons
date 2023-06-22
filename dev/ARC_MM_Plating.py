@@ -9,7 +9,7 @@ metadata = {
     'protocolName': 'ARC | MM Plating',
     'author': 'OP13 LL',
     'description': '''Plates master mix for ARCs [all wells except C9-C12] | 
-                        Place completed 2x mastermix in slot A1 of a tube rack.'''
+                        Place completed 2x mastermix in slot A1 of a tube rack [1.5mL tube for 1 plate, 5mL tube for 2+ plates].'''
 }
 
 def run(protocol: protocol_api.ProtocolContext):
