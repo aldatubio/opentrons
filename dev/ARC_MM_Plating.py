@@ -25,7 +25,7 @@ def run(protocol: protocol_api.ProtocolContext):
     
     plateDict = {}
     for i in range(number_of_plates):
-        plateDict[str(i+1)] = protocol.load_labware('thermo_96_well_endura_0.1ml', i+1, 'Plate '+str(i))
+        plateDict[str(i+1)] = protocol.load_labware('thermo_96_well_endura_0.1ml', i+1, 'Plate '+str(i+1))
 
     if number_of_plates > 1:
         rack = protocol.load_labware('usascientific_15_tuberack_5000ul', 4, 'MM: Plates > 1')
