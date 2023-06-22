@@ -8,7 +8,7 @@ metadata = {
     'apiLevel': '2.13',
     'protocolName': 'ARC | MM Plating',
     'author': 'OP13 LL',
-    'description': '''Plates master mix [8 replicates]  for ARCs. | 
+    'description': '''Plates master mix for ARCs [all wells except C9-C12] | 
                         Place completed 2x mastermix in slot A1 of a tube rack.'''
 }
 
@@ -16,59 +16,41 @@ def run(protocol: protocol_api.ProtocolContext):
 
     # 0. Initialization
     
-    number_of_plates = 1
+    number_of_plates = 2
     volume = 10
     
     protocol.home()
 
-    p300tips = protocol.load_labware('opentrons_96_filtertiprack_200ul', 3, 'Tip Rack')
-    plate = protocol.load_labware('appliedbiosystemsmicroamp_384_wellplate_40ul', 2, 'Plate')
+    p300tips = protocol.load_labware('opentrons_96_filtertiprack_200ul', 6, 'p300 Tips')
+    
+    plateDict = {}
+    for i in range(1, number_of_plates):
+        plateDict[str(i)] = protocol.load_labware('appliedbiosystemsmicroamp_384_wellplate_40ul', i, 'Plate '+str(i))
+
     if number_of_plates > 1:
-        rack = protocol.load_labware('opentrons_24_tuberack_eppendorf_1.5ml_safelock_snapcap', 4, 'Plates > 1')
+        rack = protocol.load_labware('usascientific_15_tuberack_5000ul', 4, 'MM: Plates > 1')
     else:
-        rack = protocol.load_labware('opentrons_24_tuberack_eppendorf_1.5ml_safelock_snapcap', 4, 'Plates = 1')
+        rack = protocol.load_labware('opentrons_24_tuberack_eppendorf_1.5ml_safelock_snapcap', 4, 'MM: Plates = 1')
 
     p300 = protocol.load_instrument('p300_single_gen2', 'right', tip_racks=[p300tips])
 
 
-    # 1. Pipetting master mixes 1-9
 
-    tube_number = 0
+    # 1. Adding mastermix to all wells
 
-    for section_rows in range(3):                       # rows A-E, F-J, or K-O
-        for section_columns in range(3):                # columns 1-8, 9-16, or 17-24
+    list = []
 
-            tube_number += 1
-            list = []
+    for i in range(96):
+        list.append(i)
 
-            for no_of_cols in range(8):                # 12 columns per master mix
-                for wells_in_column in range(5):        # 5 wells per column
-                
-                    list.append(
-                        section_rows*5      +
-                        section_columns*128 +
-                        no_of_cols*16       +
-                        wells_in_column
-                    )
-            
-            p300.pick_up_tip()
-            
-            if tube_number <= 6:
-                p300.distribute(
-                    volume,
-                    rack['A'+str(tube_number)],
-                    [plate.wells()[wellIndex] for wellIndex in list],
-                    new_tip = 'never',
-                    disposal_volume = 10
-                )
+    list.remove(66,74,82,90)    # remove wells C9-C12 from list
 
-            else:
-                p300.distribute(
-                    volume,
-                    rack['B'+str(tube_number - 6)],
-                    [plate.wells()[wellIndex] for wellIndex in list],
-                    new_tip = 'never',
-                    disposal_volume = 10
-                )
+    for i in range(1, number_of_plates):
 
-            p300.drop_tip()
+        p300.distribute(
+            volume,
+            rack['A1'],
+            [plateDict[str(i)].wells()[wellIndex] for wellIndex in list],
+            disposal_volume = 10
+        )
+
