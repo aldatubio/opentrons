@@ -28,9 +28,9 @@ def run(protocol: protocol_api.ProtocolContext):
         plateDict[str(i+1)] = protocol.load_labware('thermo_96_well_endura_0.1ml', i+1, 'Plate '+str(i+1))
 
     if number_of_plates > 1:
-        rack = protocol.load_labware('usascientific_15_tuberack_5000ul', 4, 'MM: Plates > 1')
+        rack = protocol.load_labware('usascientific_15_tuberack_5000ul', 5, 'MM: Plates > 1')
     else:
-        rack = protocol.load_labware('opentrons_24_tuberack_eppendorf_1.5ml_safelock_snapcap', 4, 'MM: Plates = 1')
+        rack = protocol.load_labware('opentrons_24_tuberack_eppendorf_1.5ml_safelock_snapcap', 5, 'MM: Plates = 1')
 
     p300 = protocol.load_instrument('p300_single_gen2', 'right', tip_racks=[p300tips])
 
@@ -54,3 +54,4 @@ def run(protocol: protocol_api.ProtocolContext):
             disposal_volume = 10
         )
 
+    protocol.home()
