@@ -24,7 +24,7 @@ def run(protocol: protocol_api.ProtocolContext):
     p300tips = protocol.load_labware('opentrons_96_filtertiprack_200ul', 6, 'p300 Tips')
     
     plateDict = {}
-    for i in range(1, number_of_plates):
+    for i in range(number_of_plates):
         plateDict[str(i)] = protocol.load_labware('thermo_96_well_endura_0.1ml', i, 'Plate '+str(i))
 
     if number_of_plates > 1:
@@ -45,7 +45,7 @@ def run(protocol: protocol_api.ProtocolContext):
 
     ARC_wells = [num for num in list if (num % 8 != 2) or (num < 64)]  # remove wells C9-C12 from list: #66, 74, 82, and 90
 
-    for i in range(1, number_of_plates):
+    for i in range(number_of_plates):
 
         p300.distribute(
             volume,
