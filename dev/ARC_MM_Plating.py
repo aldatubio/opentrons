@@ -43,14 +43,14 @@ def run(protocol: protocol_api.ProtocolContext):
     for i in range(96):
         list.append(i)
 
-    list.remove(66,74,82,90)    # remove wells C9-C12 from list
+    ARC_wells = [num for num in list if (num % 8 != 2) or (num < 64)]  # remove wells C9-C12 from list: #66, 74, 82, and 90
 
     for i in range(1, number_of_plates):
 
         p300.distribute(
             volume,
             rack['A1'],
-            [plateDict[str(i)].wells()[wellIndex] for wellIndex in list],
+            [plateDict[str(i)].wells()[wellIndex] for wellIndex in ARC_wells],
             disposal_volume = 10
         )
 
