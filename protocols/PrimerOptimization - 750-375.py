@@ -88,7 +88,8 @@ def run(protocol: protocol_api.ProtocolContext):
         [60*p, 40*p, 30*p, 24*p],
         tubes['A1'],
         [tubes.wells_by_name()[tube_name].bottom(10) for tube_name in ['A2', 'A3', 'A4', 'A5']],
-        disposal_volume = 10
+        disposal_volume = 10,
+	touch_tip = True
     )
 
     # add 60 µL reverse primer to A2-A5 and mix
