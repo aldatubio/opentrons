@@ -107,7 +107,7 @@ def run(protocol: protocol_api.ProtocolContext):
         )
 
     # Set p back to original value if it has been adjusted by 25%
-    if not (p).is_integer:
+    if not (p).is_integer():
         p = p*0.8
 
     ################################
