@@ -56,6 +56,10 @@ def run(protocol: protocol_api.ProtocolContext):
     # Use multiplier >2 at your own risk.
     p = 1
 
+    ### 2023-07-27: Overage when preparing only one plate was not sufficient in A tubes.
+    ### To prepare additional overage [25% more], include the following line:
+    p = p*1.25
+
     # deck setup
     p300tips = protocol.load_labware('opentrons_96_filtertiprack_200ul', 3)
     tubes = protocol.load_labware('opentrons_24_tuberack_eppendorf_1.5ml_safelock_snapcap', 2)
@@ -75,6 +79,7 @@ def run(protocol: protocol_api.ProtocolContext):
 
     # add water of appropriate volume to each tube
     # 0, 20, 30, 36 µL to A2-A5, respectively
+
     p300.distribute(
         [20*p, 30*p, 36*p],
         water['A5'],
@@ -89,7 +94,7 @@ def run(protocol: protocol_api.ProtocolContext):
         tubes['A1'],
         [tubes.wells_by_name()[tube_name].bottom(10) for tube_name in ['A2', 'A3', 'A4', 'A5']],
         disposal_volume = 10,
-	touch_tip = True
+	    touch_tip = True
     )
 
     # add 60 µL reverse primer to A2-A5 and mix
@@ -101,6 +106,9 @@ def run(protocol: protocol_api.ProtocolContext):
             mix_after = (4, 80*p)
         )
 
+    # Set p back to original value if it has been adjusted by 25%
+    if not (p).is_integer:
+        p = p*0.8
 
     ################################
     ### 2. Primer pair dilutions ###
