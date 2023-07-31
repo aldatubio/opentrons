@@ -65,7 +65,8 @@ metadata = {
     'apiLevel': '2.13',
     'protocolName': 'Pretoria | RNA Dilutions for Reportable Range',
     'author': 'OP13 LL',
-    'description': '''Performs eleven 2.5-fold dilutions. After the protocol is complete, each tube will contain 540 µL RNA.'''
+    'description': '''Performs eleven 2.5-fold dilutions. After the protocol is complete, each tube will contain 540 µL RNA. 
+                    DURATION: 15 min.'''
 }
 
 def run(protocol: protocol_api.ProtocolContext):
@@ -102,12 +103,16 @@ def run(protocol: protocol_api.ProtocolContext):
 
     for i in range(1, num_tubes):
 
+        p1000.pick_up_tip()
+
         p1000.distribute(
             diluent_vol,
             diluent[diluent_location],
             [tubes.wells()[i]],
             disposal_volume = 50
         )
+
+        p1000.drop_tip()
 
 
     ###
