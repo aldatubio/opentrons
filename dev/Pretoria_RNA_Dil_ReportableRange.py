@@ -101,9 +101,9 @@ def run(protocol: protocol_api.ProtocolContext):
     ### 1. Transfer diluent
     ###
 
-    for i in range(1, num_tubes):
+    p1000.pick_up_tip()
 
-        p1000.pick_up_tip()
+    for i in range(1, num_tubes):
 
         p1000.distribute(
             diluent_vol,
@@ -113,7 +113,7 @@ def run(protocol: protocol_api.ProtocolContext):
             new_tip = 'never'
         )
 
-        p1000.drop_tip()
+    p1000.drop_tip()
 
 
     ###
