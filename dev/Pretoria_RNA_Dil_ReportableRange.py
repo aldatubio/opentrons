@@ -1,7 +1,7 @@
 '''
 Project Pretoria
 RNA Dilutions for Reportable Range
-Updated 2023-07-28
+Updated 2023-07-31
 Author: OP13 LL
 
 +----------+----------------------+---------------+------------+
@@ -51,6 +51,12 @@ i.e., one reportable range series per PANDAAA.
 5. ​Perform same transfer workflow of 360 µL RNA, this time from tube #2 into tube #3. 
 6. ​Repeat until 2.5-fold dilutions have been performed eleven times. ​ 
 
+Tube Setup
+
+25mL tube: A3 of 6-ct 50mL rack
+Single-use RNA aliquot: A1 of 24-ct 1.5mL rack
+Empty 1.5mL tubes: rows A and B [except A1] pf 24-ct 1.5mL rack
+
 '''
 
 from opentrons import protocol_api
@@ -59,17 +65,63 @@ metadata = {
     'apiLevel': '2.13',
     'protocolName': 'Pretoria | RNA Dilutions for Reportable Range',
     'author': 'OP13 LL',
-    'description': '''Performs eleven 2.5-fold dilutions to generate a reportable range from 1.0E6 to 42 cp/rxn [adding 10 µL/well].'''
+    'description': '''Performs eleven 2.5-fold dilutions. After the protocol is complete, each tube will contain 540 µL RNA.'''
 }
 
 def run(protocol: protocol_api.ProtocolContext):
 
     protocol.home()
 
+    ###
+    ### User-defined variables
+    ###
+
+    diluent_vol = 540
+    diluent_location = 'A3'
+    
+    RNA_vol = 360
+    num_tubes = 12 # number of tubes to contain RNA; arranged in columns (A1, B1, C1, D1, A2...)
+
+
+    ###
+    ### Initialization
+    ###
+
     p1000tips = protocol.load_labware('opentrons_96_filtertiprack_1000ul', 3)
     tubes = protocol.load_labware('opentrons_24_tuberack_eppendorf_1.5ml_safelock_snapcap', 2)
-    # custom 25mL tube definition
+    # custom 25mL tube definition - Eppendorf screw-top
     diluent = protocol.load_labware('opentrons_6_tuberack_25ml', 1)
 
     # pipette initialization
     p1000 = protocol.load_instrument('p1000_single_gen2', 'left', tip_racks=[p1000tips])
+
+
+    ###
+    ### 1. Transfer diluent
+    ###
+
+    for i in range(1, num_tubes):
+
+        p1000.distribute(
+            diluent_vol,
+            diluent[diluent_location],
+            [tubes.wells()[i]],
+            disposal_volume = 50
+        )
+
+
+    ###
+    ### 2. Transfer RNA
+    ###
+
+    for i in range(1, num_tubes):
+
+        p1000.transfer(
+            RNA_vol,
+            [tubes.wells()[i - 1]],
+            [tubes.wells()[i]],
+            mix_after = (
+                5,
+                (diluent_vol + RNA_vol)*0.8
+            )
+        )
