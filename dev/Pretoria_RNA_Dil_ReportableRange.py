@@ -109,7 +109,8 @@ def run(protocol: protocol_api.ProtocolContext):
             diluent_vol,
             diluent[diluent_location],
             [tubes.wells()[i]],
-            disposal_volume = 50
+            disposal_volume = 50,
+            new_tip = 'never'
         )
 
         p1000.drop_tip()
