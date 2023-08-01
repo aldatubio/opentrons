@@ -116,6 +116,7 @@ def run(protocol: protocol_api.ProtocolContext):
 
     diluted_RNA_viz = protocol.define_liquid(
         'RNA Dilutions',
+        '',
         '#f4f'
     )
 
