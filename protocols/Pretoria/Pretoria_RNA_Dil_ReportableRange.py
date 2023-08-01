@@ -65,7 +65,7 @@ metadata = {
     'apiLevel': '2.14',
     'protocolName': 'Pretoria | RNA Dilutions for Reportable Range',
     'author': 'OP13 LL',
-    'description': '''Performs eleven 2.5-fold dilutions. 
+    'description': '''Performs eleven 2.5-fold dilutions. After the protocol is complete, each tube will contain 540 µL RNA. 
                     DURATION: 15 min.'''
 }
 
@@ -109,15 +109,9 @@ def run(protocol: protocol_api.ProtocolContext):
     )
 
     RNA_viz = protocol.define_liquid(
-        'RNA',
-        'Single-use RNA aliquot in 1.5mL tube',
+        'RNA Stock',
+        'Single-use RNA aliquot',
         '#f44'
-    )
-
-    empty_viz = protocol.define_liquid(
-        'Empty Tube',
-        '1.5mL tubes. Once filled, tubes are arranged in columns [B1 is dilution 1, C1 is dilution 2, D1 is dilution 3, A2 is dilution 4, etc.].',
-        '#777'
     )
 
     diluent[diluent_location].load_liquid(
@@ -129,12 +123,6 @@ def run(protocol: protocol_api.ProtocolContext):
         RNA_viz,
         RNA_vol + diluent_vol
     )
-
-    for i in range(1, num_tubes):
-        tubes.wells()[i].load_liquid(
-            empty_viz,
-            0
-        )
     # ************************************
 
 
