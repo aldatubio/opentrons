@@ -85,6 +85,15 @@ def run(protocol: protocol_api.ProtocolContext):
 
 
     ###
+    ### Visualization of deck layout - API 2.14 and above only!
+    ### To use protocol simulator, downgrade this protocol to 2.13 and comment out this section
+    ###
+
+    
+    
+    
+    
+    ###
     ### Initialization
     ###
 
@@ -105,11 +114,10 @@ def run(protocol: protocol_api.ProtocolContext):
 
     for i in range(1, num_tubes):
 
-        p1000.distribute(
+        p1000.transfer(
             diluent_vol,
             diluent[diluent_location],
             [tubes.wells()[i]],
-            disposal_volume = 50,
             new_tip = 'never'
         )
 
