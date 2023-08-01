@@ -98,8 +98,8 @@ def run(protocol: protocol_api.ProtocolContext):
 
 
     ###
-    ### Asterisks denote visualization of deck layout - API 2.14 and above only!
-    ### To use protocol simulator, downgrade this protocol to 2.13 and comment out these sections
+    ### Visualization of deck layout - API 2.14 and above only!
+    ### To use protocol simulator, downgrade this protocol to 2.13 and comment out this section
     ###
     # ************************************
     diluent_viz = protocol.define_liquid(
@@ -112,12 +112,6 @@ def run(protocol: protocol_api.ProtocolContext):
         'RNA Stock',
         'Single-use RNA aliquot',
         '#f44'
-    )
-
-    diluted_RNA_viz = protocol.define_liquid(
-        'RNA Dilutions',
-        '',
-        '#f4f'
     )
 
     diluent[diluent_location].load_liquid(
@@ -147,12 +141,6 @@ def run(protocol: protocol_api.ProtocolContext):
             new_tip = 'never'
         )
 
-        # ****************************
-        tubes.wells()[i].load_liquid(
-            diluent_viz,
-            diluent_vol
-        )
-        # ****************************
 
     p1000.drop_tip()
 
@@ -172,20 +160,3 @@ def run(protocol: protocol_api.ProtocolContext):
                 (diluent_vol + RNA_vol)*0.8
             )
         )
-
-        # ***********************************
-        if i - 1 == 0:
-            tubes['A1'].load_liquid(
-                RNA_viz,
-                (-1)*RNA_vol
-            )
-        else:
-            tubes.wells()[i].load_liquid(
-                diluent_viz,
-                (-1)*diluent_vol
-            )
-        tubes.wells()[i].load_liquid(
-            diluted_RNA_viz,
-            diluent_vol + RNA_vol
-        )
-        # ***********************************
