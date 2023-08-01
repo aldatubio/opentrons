@@ -148,7 +148,7 @@ def run(protocol: protocol_api.ProtocolContext):
         )
 
         # ****************************
-        tubes[i].load_liquid(
+        tubes.wells()[i].load_liquid(
             diluent_viz,
             diluent_vol
         )
@@ -180,11 +180,11 @@ def run(protocol: protocol_api.ProtocolContext):
                 (-1)*RNA_vol
             )
         else:
-            tubes[i].load_liquid(
+            tubes.wells()[i].load_liquid(
                 diluent_viz,
                 (-1)*diluent_vol
             )
-        tubes[i].load_liquid(
+        tubes.wells()[i].load_liquid(
             diluted_RNA_viz,
             diluent_vol + RNA_vol
         )
