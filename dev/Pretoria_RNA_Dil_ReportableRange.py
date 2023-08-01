@@ -62,7 +62,7 @@ Empty 1.5mL tubes: rows A and B [except A1] pf 24-ct 1.5mL rack
 from opentrons import protocol_api
 
 metadata = {
-    'apiLevel': '2.13',
+    'apiLevel': '2.14',
     'protocolName': 'Pretoria | RNA Dilutions for Reportable Range',
     'author': 'OP13 LL',
     'description': '''Performs eleven 2.5-fold dilutions. After the protocol is complete, each tube will contain 540 µL RNA. 
@@ -82,15 +82,6 @@ def run(protocol: protocol_api.ProtocolContext):
     
     RNA_vol = 360
     num_tubes = 12 # number of tubes to contain RNA; arranged in columns (A1, B1, C1, D1, A2...)
-
-
-    ###
-    ### Visualization of deck layout - API 2.14 and above only!
-    ### To use protocol simulator, downgrade this protocol to 2.13 and comment out this section
-    ###
-
-    
-    
     
     
     ###
@@ -107,6 +98,40 @@ def run(protocol: protocol_api.ProtocolContext):
 
 
     ###
+    ### Asterisks denote visualization of deck layout - API 2.14 and above only!
+    ### To use protocol simulator, downgrade this protocol to 2.13 and comment out these sections
+    ###
+    # ************************************
+    diluent_viz = protocol.define_liquid(
+        'Diluent',
+        '0.05 mg/mL tRNA in dH2O',
+        '#44f'
+    )
+
+    RNA_viz = protocol.define_liquid(
+        'RNA Stock',
+        'Single-use RNA aliquot',
+        '#f44'
+    )
+
+    diluted_RNA_viz = protocol.define_liquid(
+        'RNA Dilutions',
+        '#f4f'
+    )
+
+    diluent[diluent_location].load_liquid(
+        diluent_viz,
+        diluent_vol*num_tubes
+    )
+
+    tubes['A1'].load_liquid(
+        RNA_viz,
+        RNA_vol + diluent_vol
+    )
+    # ************************************
+
+
+    ###
     ### 1. Transfer diluent
     ###
 
@@ -120,6 +145,13 @@ def run(protocol: protocol_api.ProtocolContext):
             [tubes.wells()[i]],
             new_tip = 'never'
         )
+
+        # ****************************
+        tubes[i].load_liquid(
+            diluent_viz,
+            diluent_vol
+        )
+        # ****************************
 
     p1000.drop_tip()
 
@@ -139,3 +171,20 @@ def run(protocol: protocol_api.ProtocolContext):
                 (diluent_vol + RNA_vol)*0.8
             )
         )
+
+        # ***********************************
+        if i - 1 == 0:
+            tubes['A1'].load_liquid(
+                RNA_viz,
+                (-1)*RNA_vol
+            )
+        else:
+            tubes[i].load_liquid(
+                diluent_viz,
+                (-1)*diluent_vol
+            )
+        tubes[i].load_liquid(
+            diluted_RNA_viz,
+            diluent_vol + RNA_vol
+        )
+        # ***********************************
