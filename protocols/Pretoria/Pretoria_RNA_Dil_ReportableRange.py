@@ -53,9 +53,9 @@ i.e., one reportable range series per PANDAAA.
 
 Tube Setup
 
-25mL tube: A3 of 6-ct 50mL rack
+25mL tube: B1 of 6-ct 50mL rack
 Single-use RNA aliquot: A1 of 24-ct 1.5mL rack
-Empty 1.5mL tubes: rows A and B [except A1] pf 24-ct 1.5mL rack
+Empty 1.5mL tubes: colums 1-3 [except A1] of 24-ct 1.5mL rack
 
 '''
 
@@ -78,7 +78,7 @@ def run(protocol: protocol_api.ProtocolContext):
     ###
 
     diluent_vol = 540
-    diluent_location = 'A3'
+    diluent_location = 'B1'
     
     RNA_vol = 360
     num_tubes = 12 # number of tubes to contain RNA; arranged in columns (A1, B1, C1, D1, A2...)
@@ -88,10 +88,10 @@ def run(protocol: protocol_api.ProtocolContext):
     ### Initialization
     ###
 
-    p1000tips = protocol.load_labware('opentrons_96_filtertiprack_1000ul', 3)
+    p1000tips = protocol.load_labware('opentrons_96_filtertiprack_1000ul', 6)
     tubes = protocol.load_labware('opentrons_24_tuberack_eppendorf_1.5ml_safelock_snapcap', 2)
     # custom 25mL tube definition - Eppendorf screw-top
-    diluent = protocol.load_labware('opentrons_6_tuberack_25ml', 1)
+    diluent = protocol.load_labware('opentrons_6_tuberack_25ml', 5)
 
     # pipette initialization
     p1000 = protocol.load_instrument('p1000_single_gen2', 'left', tip_racks=[p1000tips])
@@ -172,3 +172,6 @@ def run(protocol: protocol_api.ProtocolContext):
                 (diluent_vol + RNA_vol)*0.8
             )
         )
+
+
+    protocol.home()
