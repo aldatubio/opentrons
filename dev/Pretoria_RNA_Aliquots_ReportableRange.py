@@ -64,7 +64,7 @@ RNA dilutions [12]: columns 1-3 of 24-ct 1.5mL rack
 from opentrons import protocol_api
 
 metadata = {
-    'apiLevel': '2.13',
+    'apiLevel': '2.14',
     'protocolName': 'Pretoria | RNA Dilutions for Reportable Range',
     'author': 'OP13 LL',
     'description': '''Performs eleven 2.5-fold dilutions. 
@@ -103,7 +103,7 @@ def run(protocol: protocol_api.ProtocolContext):
   ### To use protocol simulator, downgrade this protocol to 2.13 and comment out this section
   ###
   # ************************************
-  '''
+  
   RNA_viz = protocol.define_liquid(
       'RNA Dilutions',
       '12 tubes arranged in columns [A1 is dilution 1, B1 is dilution 2, etc].',
@@ -128,7 +128,7 @@ def run(protocol: protocol_api.ProtocolContext):
           540
       )
   # ************************************
-'''
+
 
 
   ###
