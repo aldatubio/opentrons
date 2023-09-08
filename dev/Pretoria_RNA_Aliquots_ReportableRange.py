@@ -234,7 +234,7 @@ def run(protocol: protocol_api.ProtocolContext):
     # fill wells
     p300.distribute(
         aliquot_vol,
-        [tubes.wells()[negatives_location]],
+        tubes[negatives_location],
         [plate.wells()[well] for well in wells_to_fill]
       )
     
