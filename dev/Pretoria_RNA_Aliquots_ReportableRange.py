@@ -64,7 +64,7 @@ RNA dilutions [12]: columns 1-3 of 24-ct 1.5mL rack
 from opentrons import protocol_api
 
 metadata = {
-    'apiLevel': '2.14',
+    'apiLevel': '2.13',
     'protocolName': 'Pretoria | RNA Dilutions for Reportable Range',
     'author': 'OP13 LL',
     'description': '''Performs eleven 2.5-fold dilutions. 
