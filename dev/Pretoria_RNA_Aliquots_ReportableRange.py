@@ -65,10 +65,10 @@ from opentrons import protocol_api
 
 metadata = {
     'apiLevel': '2.14',
-    'protocolName': 'Pretoria | RNA Dilutions for Reportable Range',
+    'protocolName': 'Pretoria | RNA Aliquoting for Reportable Range',
     'author': 'OP13 LL',
-    'description': '''Performs eleven 2.5-fold dilutions. 
-                    DURATION: 15 min.'''
+    'description': '''Distributes RNA dilutions into a 96-well plate for stamping. 
+                    '''
 }
 
 def run(protocol: protocol_api.ProtocolContext):
