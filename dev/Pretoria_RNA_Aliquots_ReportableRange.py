@@ -95,7 +95,7 @@ def run(protocol: protocol_api.ProtocolContext):
   plate = protocol.load_labware('armadillo_96_wellplate_200ul_pcr_full_skirt', 1)
 
   # pipette initialization
-  p300 = protocol.load_instrument('p1000_single_gen2', 'right', tip_racks=[p300tips])
+  p300 = protocol.load_instrument('p300_single_gen2', 'right', tip_racks=[p300tips])
 
 
   ###
