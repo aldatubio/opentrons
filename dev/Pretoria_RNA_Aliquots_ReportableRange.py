@@ -184,7 +184,9 @@ def run(protocol: protocol_api.ProtocolContext):
      p300.distribute(
          aliquot_vol,
          [tubes.wells()[dil]],
-         [plate.wells()[well] for well in wells_to_fill]
+         [plate.wells()[well] for well in wells_to_fill],
+         blow_out = True,
+         blowout_location = 'source well'
       )        
      
 
