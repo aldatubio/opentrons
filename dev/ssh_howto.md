@@ -5,5 +5,6 @@
 
 ## Reference links - a work in progress
 - **[Drag-and-drop files onto PowerShell scripts](https://stackoverflow.com/questions/2819908/drag-and-drop-to-a-powershell-script/67655089#67655089)**
-- **[PowerShell crash course](https://www.finitewisdom.com/blogs/joshua-golub/2020/11/27/a-crash-course-in-powershell-scripting)**
+- **[PowerShell crash course - brief reference](https://www.finitewisdom.com/blogs/joshua-golub/2020/11/27/a-crash-course-in-powershell-scripting)**
+- **[PowerShell tutorial - in-depth](https://powershellbyexample.dev/)**
 - **[Using parameters in PowerShell functions](https://www.techtarget.com/searchwindowsserver/tip/Understanding-the-parameters-of-Windows-PowerShell-functions)**
