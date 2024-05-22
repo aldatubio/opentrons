@@ -92,6 +92,9 @@ csv_raw = '''1,17,68
 # Parsing csv input - StringIO method treats pasted string as file object
 csv_file = io.StringIO(csv_raw)
 csv_reader = csv.reader(csv_file, delimiter = ",")
+# saving the csv_reader as a list allows us to iterate over the reader more than once -
+# using the reader and doing a "for row in csv_reader" loop consumes the reader
+dataset = list(csv_reader)
 
 metadata = {
     'apiLevel': '2.13',
@@ -112,14 +115,12 @@ def run(protocol: protocol_api.ProtocolContext):
     diluent_location = 'B1'
 
     p300tips = protocol.load_labware('opentrons_96_filtertiprack_200ul', 3)
-    p20tips = protocol.load_labware('opentrons_96_filtertiprack_20ul', 6)
     tubes = protocol.load_labware('opentrons_24_tuberack_eppendorf_1.5ml_safelock_snapcap', 2)
     # custom 25mL tube definition - Eppendorf screw-top
     diluent = protocol.load_labware('opentrons_6_tuberack_25ml', 5)
 
     # pipette initialization
     p300 = protocol.load_instrument('p300_single_gen2', 'right', tip_racks=[p300tips])
-    p20 = protocol.load_instrument('p20_single_gen2', 'left', tip_racks=[p20tips])
 
 
     ### needs edits
@@ -171,7 +172,8 @@ def run(protocol: protocol_api.ProtocolContext):
 
     p300.pick_up_tip()
 
-    for row in csv_reader:
+    # ensure that row data is wrapped in int() - needs to be number type, not string
+    for row in dataset:
         p300.transfer(
             int(row[2]),
             diluent[diluent_location],
@@ -186,7 +188,9 @@ def run(protocol: protocol_api.ProtocolContext):
     ### 2. Transfer RNA
     ###
 
-    for row in csv_reader:
+    for row in dataset:
+
+        # set mixing volume - must be less than max pipette volume
         if (int(row[1]) + int(row[2]))*0.8 < 200:
             mix_vol = (int(row[1]) + int(row[2]))*0.8
         else:
