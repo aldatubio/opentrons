@@ -6,7 +6,15 @@ Author: OP13 LL
 
 Adapted from Project Pretoria's RNA Dilutions for Reportable Range protocol
 
-Basic design: takes parameters (volumes, number of tubes/dilutions) as a pasted csv table
+
+INSTRUCTIONS FOR USE
+
+This protocol takes parameters (volumes, number of tubes/dilutions) as a pasted csv table
+(as such, this protocol could be adapted easily for other purposes).
+
+•	Paste csv data as list into "csv_raw" variable. Ensure that the pasted list only concerns tube dilutions
+    performed by the robot - for example, the stock/starting tube ("tube 0") should not be included in the list.
+•	If needed, you can also change the position of the tube of diluent - "diluent_location" variable.
 
 ----------------------------
   Stock Conc.    2.5E+6 µL  
@@ -66,10 +74,16 @@ import csv
 import io
 from opentrons import protocol_api
 
+# To paste a list below:
+# Create an Excel sheet with the following columns:
+# dilution number, RNA volume, diluent volume
+# then export this sheet as a csv. Open the csv with Notepad and paste contents here.
+# Ensure that column headers and stock/source tube information ("dilution 0") are EXCLUDED.
 
 ###
 ### Paste your raw csv data here
 ###
+###*****************************
 csv_raw = '''1,17,68
 2,17,68
 3,17,68
@@ -84,6 +98,7 @@ csv_raw = '''1,17,68
 12,130,130
 13,130,130
 '''
+###*****************************
 ###
 ###
 ###
@@ -123,8 +138,7 @@ def run(protocol: protocol_api.ProtocolContext):
     p300 = protocol.load_instrument('p300_single_gen2', 'right', tip_racks=[p300tips])
 
 
-    ### needs edits
-
+    
     ### Visualization of deck layout - API 2.14 and above only!
     ### To use protocol simulator, downgrade this protocol to 2.13 and comment out this section
     ###
@@ -148,18 +162,22 @@ def run(protocol: protocol_api.ProtocolContext):
         '#777'
     )
 
+    total_diluent_vol = 100
+    for row in dataset:
+        total_diluent_vol = total_diluent_vol + int(row[2])
+
     diluent[diluent_location].load_liquid(
         diluent_viz,
-        diluent_vol*num_tubes
+        total_diluent_vol
     )
 
     tubes['A1'].load_liquid(
         RNA_viz,
-        RNA_vol + diluent_vol
+        int(dataset[0][1]) + 20
     )
 
-    for i in range(1, sum(num_tubes)):
-        tubes.wells()[i].load_liquid(
+    for row in dataset:
+        tubes.wells()[int(row[0])].load_liquid(
             empty_viz,
             0
         )
