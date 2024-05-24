@@ -215,7 +215,7 @@ def run(protocol: protocol_api.ProtocolContext):
         diluent[diluent_location],
         [tubes.wells()[index] for index in tubes_to_fill],
         blow_out = True,
-        blowout_location = diluent[diluent_location]
+        blowout_location = "source well"
     )
     
 
