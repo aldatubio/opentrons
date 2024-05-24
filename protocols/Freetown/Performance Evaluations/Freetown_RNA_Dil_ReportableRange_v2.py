@@ -13,7 +13,7 @@ This protocol takes parameters (volumes, number of tubes/dilutions) as a pasted 
 (as such, this protocol could be adapted easily for other purposes).
 
 •	Paste csv data as list into "csv_raw" variable. Ensure that the pasted list only concerns tube dilutions
-    performed by the robot - for example, the stock/starting tube ("tube 0") should not be included in the list.
+    performed by the robot - for example, the stock/starting tube ("dilution 0") should not be included in the list.
 •	If needed, you can also change the position of the tube of diluent - "diluent_location" variable.
 
 ----------------------------
@@ -84,19 +84,19 @@ from opentrons import protocol_api
 ### Paste your raw csv data here
 ###
 ###*****************************
-csv_raw = '''1,17,68
-2,17,68
-3,17,68
-4,17,68
-5,17,68
-6,17,68
-7,36,144
-8,130,130
-9,130,130
-10,130,130
-11,130,130
-12,130,130
-13,130,130
+csv_raw = '''1,50,200
+2,50,200
+3,50,200
+4,50,200
+5,50,200
+6,50,200
+7,100,400
+8,300,300
+9,300,300
+10,300,300
+11,300,300
+12,300,300
+13,300,300
 '''
 ###*****************************
 ###
@@ -122,21 +122,21 @@ metadata = {
 def run(protocol: protocol_api.ProtocolContext):
 
     protocol.home()
-
+    
     ###
     ### Initialization
     ###
 
     diluent_location = 'B1'
 
-    p300tips = protocol.load_labware('opentrons_96_filtertiprack_200ul', 3)
     tubes = protocol.load_labware('opentrons_24_tuberack_eppendorf_1.5ml_safelock_snapcap', 2)
     # custom 25mL tube definition - Eppendorf screw-top
-    diluent = protocol.load_labware('opentrons_6_tuberack_25ml', 5)
+    diluent = protocol.load_labware('opentrons_6_tuberack_25ml', 1)
 
-    # pipette initialization
+    p1000tips = protocol.load_labware('opentrons_96_filtertiprack_1000ul', 6)
+    p300tips = protocol.load_labware('opentrons_96_filtertiprack_200ul', 3)   
+    p1000 = protocol.load_instrument('p1000_single_gen2', 'left', tip_racks=[p1000tips])
     p300 = protocol.load_instrument('p300_single_gen2', 'right', tip_racks=[p300tips])
-
 
     
     ### Visualization of deck layout - API 2.14 and above only!
@@ -188,19 +188,34 @@ def run(protocol: protocol_api.ProtocolContext):
     ### 1. Transfer diluent
     ###
 
-    p300.pick_up_tip()
+    counter = []
+    diluent_vols = []
+    tubes_to_fill = []
 
-    # ensure that row data is wrapped in int() - needs to be number type, not string
     for row in dataset:
-        p300.transfer(
-            int(row[2]),
-            diluent[diluent_location],
-            [tubes.wells()[int(row[0])]],
-            new_tip = 'never'
-        )
 
-    p300.drop_tip()
+        # ensure that row data is wrapped in int() - needs to be number type, not string
+        diluent_vols.append(int(row[2]))
+        tubes_to_fill.append(int(row[0]))
 
+        # Choose pipette to use: first, create list: any time a volume greater than 200 is detected, a "1" gets added to the list
+        if int(row[2]) > 200:
+            counter.append(1)
+        else:
+            counter.append(0)
+    
+    # Choosing pipette: check: are there any "1"s in the list? if so, a volume greater than 200 is present, and we will need the P1000
+    if sum(counter) > 0:
+        pipette = p1000
+    else:
+        pipette = p300
+
+    pipette.distribute(
+        diluent_vols,
+        diluent[diluent_location],
+        [tubes.wells()[index] for index in tubes_to_fill]
+    )
+    
 
     ###
     ### 2. Transfer RNA
@@ -208,13 +223,21 @@ def run(protocol: protocol_api.ProtocolContext):
 
     for row in dataset:
 
+        # choose pipette
+        if int(row[1]) > 200:
+            pipette = p1000
+            pipette_max_vol = 1000
+        else:
+            pipette = p300
+            pipette_max_vol = 200
+
         # set mixing volume - must be less than max pipette volume
-        if (int(row[1]) + int(row[2]))*0.8 < 200:
+        if (int(row[1]) + int(row[2]))*0.8 < pipette_max_vol:
             mix_vol = (int(row[1]) + int(row[2]))*0.8
         else:
-            mix_vol = 200
+            mix_vol = pipette_max_vol
         
-        p300.transfer(
+        pipette.transfer(
             int(row[1]),
             [tubes.wells()[int(row[0]) - 1]],
             [tubes.wells()[int(row[0])]],
