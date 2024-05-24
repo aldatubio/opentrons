@@ -162,7 +162,7 @@ def run(protocol: protocol_api.ProtocolContext):
         '#777'
     )
 
-    total_diluent_vol = 100
+    total_diluent_vol = 200
     for row in dataset:
         total_diluent_vol = total_diluent_vol + int(row[2])
 
@@ -213,7 +213,9 @@ def run(protocol: protocol_api.ProtocolContext):
     pipette.distribute(
         diluent_vols,
         diluent[diluent_location],
-        [tubes.wells()[index] for index in tubes_to_fill]
+        [tubes.wells()[index] for index in tubes_to_fill],
+        blow_out = True,
+        blowout_location = diluent[diluent_location]
     )
     
 
