@@ -112,7 +112,7 @@ csv_reader = csv.reader(csv_file, delimiter = ",")
 dataset = list(csv_reader)
 
 metadata = {
-    'apiLevel': '2.13',
+    'apiLevel': '2.14',
     'protocolName': 'Freetown | RNA Dilutions for Reportable Range',
     'author': 'OP13 LL',
     'description': '''Performs fourteen-point dilution series. 
@@ -142,7 +142,7 @@ def run(protocol: protocol_api.ProtocolContext):
     ### Visualization of deck layout - API 2.14 and above only!
     ### To use protocol simulator, downgrade this protocol to 2.13 and comment out this section
     ###
-    '''
+    
     # ************************************
     diluent_viz = protocol.define_liquid(
         'Diluent',
@@ -182,7 +182,7 @@ def run(protocol: protocol_api.ProtocolContext):
             0
         )
     # ************************************
-    '''
+    
 
     ###
     ### 1. Transfer diluent
