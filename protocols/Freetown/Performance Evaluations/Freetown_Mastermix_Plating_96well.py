@@ -38,12 +38,25 @@ def add_parameters(parameters: protocol_api.Parameters):
         unit = 'µL'
     )
 
+    parameters.add_str(
+        variable_name = 'mmx_tube_type',
+        display_name = 'Mastermix tube type',
+        choices = [
+            {'display_name': '1.5 mL Snapcap', 'value': 'opentrons_24_tuberack_eppendorf_1.5ml_safelock_snapcap'},
+            {'display_name': '2 mL Snapcap', 'value': 'opentrons_24_tuberack_eppendorf_2ml_safelock_snapcap'},
+            {'display_name': '1.5 mL Snapcap', 'value': 'opentrons_24_tuberack_nest_1.5ml_screwcap'},
+            {'display_name': '2 mL Screwcap', 'value': 'opentrons_24_tuberack_generic_2ml_screwcap'},
+            {'display_name': '5 mL Screwcap', 'value': 'usascientific_15_tuberack_5000ul'}
+        ]
+    )
+
 def run(protocol: protocol_api.ProtocolContext):
 
     # 0. Initialization
     
     number_of_plates = protocol.params.number_of_plates
     volume = protocol.params.volume
+    mastermix_rack = protocol.params.mmx_tube_type
     
     protocol.home()
 
@@ -53,10 +66,7 @@ def run(protocol: protocol_api.ProtocolContext):
     for i in range(number_of_plates):
         plateDict[str(i+1)] = protocol.load_labware('thermo_96_well_endura_0.1ml', i+1, 'Plate '+str(i+1))
 
-    if number_of_plates > 1:
-        rack = protocol.load_labware('usascientific_15_tuberack_5000ul', 5, 'MM: Plates > 1')
-    else:
-        rack = protocol.load_labware('opentrons_24_tuberack_eppendorf_1.5ml_safelock_snapcap', 5, 'MM: Plates = 1')
+    rack = protocol.load_labware(mastermix_rack, 5)
 
     p300 = protocol.load_instrument('p300_single_gen2', 'right', tip_racks=[p300tips])
 
