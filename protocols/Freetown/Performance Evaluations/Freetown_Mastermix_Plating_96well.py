@@ -9,8 +9,7 @@ metadata = {
     'apiLevel': '2.18',
     'protocolName': 'Freetown | Mastermix Plating for Reportable Range',
     'author': 'OP13 LL',
-    'description': '''Plates master mix for reportable range experiments [all wells of a 96-well plate]. | 
-                        Place completed 2x mastermix in slot A1 of a tube rack [1.5mL tube for 1 plate, 5mL tube for 2+ plates].'''
+    'description': '''Plates master mix for reportable range experiments [all wells of a 96-well plate].'''
 }
 
 requirements = {
@@ -94,6 +93,13 @@ def run(protocol: protocol_api.ProtocolContext):
 
     #ARC_wells = [num for num in list if (num % 8 != 2) or (num < 64)]  # remove wells C9-C12 from list: #66, 74, 82, and 90
 
+    # these rates are equivalent to Picus p300 speed 3 - roughly 80 µL per second
+    # see more on page 29 here:
+    # https://pipette.com/mm5/pdfs/manuals-brochures/Biohit-Picus-User-Manual.pdf
+    p300.flow_rate.aspirate = 80
+    p300.flow_rate.dispense = 80
+    p300.flow_rate.blow_out = 80
+
     for i in range(number_of_plates):
 
         p300.distribute(
@@ -102,7 +108,7 @@ def run(protocol: protocol_api.ProtocolContext):
             [plateDict[str(i+1)].wells()[wellIndex] for wellIndex in list],
             disposal_volume = 10,
             blow_out = True,
-            blowout_location = "source well"
+            blowout_location = "source well",
         )
 
     protocol.home()
