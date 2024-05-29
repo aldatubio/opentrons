@@ -104,6 +104,7 @@ csv_raw = '''1,50,200
 ###
 
 metadata = {
+    'apiLevel': '2.18',
     'protocolName': 'Freetown | RNA Dilutions for Reportable Range',
     'author': 'OP13 LL',
     'description': '''Performs fourteen-point dilution series as described in the Analytical Inclusivity protocol. 
@@ -111,8 +112,7 @@ metadata = {
 }
 
 requirements = {
-    'robotType': 'OT-2',
-    'apiLevel': '2.18'
+    'robotType': 'OT-2'
 }
 
 def add_parameters(parameters: protocol_api.Parameters):
@@ -134,19 +134,19 @@ def run(protocol: protocol_api.ProtocolContext):
 
     if protocol.params.default_volumes is True:
         csv_raw = '''1,50,200
-        2,50,200
-        3,50,200
-        4,50,200
-        5,50,200
-        6,50,200
-        7,100,400
-        8,300,300
-        9,300,300
-        10,300,300
-        11,300,300
-        12,300,300
-        13,300,300
-        '''
+2,50,200
+3,50,200
+4,50,200
+5,50,200
+6,50,200
+7,100,400
+8,300,300
+9,300,300
+10,300,300
+11,300,300
+12,300,300
+13,300,300
+'''
 
     # Parsing csv input - StringIO method treats pasted string as file object
     csv_file = io.StringIO(csv_raw)
