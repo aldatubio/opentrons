@@ -26,7 +26,6 @@ def add_parameters(parameters: protocol_api.Parameters):
         default = 1,
         minimum = 1,
         maximum = 4,
-        unit = 'plate(s)'
     )
 
     parameters.add_float(
@@ -35,7 +34,8 @@ def add_parameters(parameters: protocol_api.Parameters):
         description = 'Volume of liquid added to each well.',
         default = 10.0,
         minimum = 10.0,
-        maximum = 20.0
+        maximum = 20.0,
+        unit = 'µL'
     )
 
 def run(protocol: protocol_api.ProtocolContext):
