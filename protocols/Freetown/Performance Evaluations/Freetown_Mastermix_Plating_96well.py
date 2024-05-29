@@ -44,10 +44,11 @@ def add_parameters(parameters: protocol_api.Parameters):
         choices = [
             {'display_name': '1.5 mL Snapcap', 'value': 'opentrons_24_tuberack_eppendorf_1.5ml_safelock_snapcap'},
             {'display_name': '2 mL Snapcap', 'value': 'opentrons_24_tuberack_eppendorf_2ml_safelock_snapcap'},
-            {'display_name': '1.5 mL Snapcap', 'value': 'opentrons_24_tuberack_nest_1.5ml_screwcap'},
+            {'display_name': '1.5 mL Screwcap', 'value': 'opentrons_24_tuberack_nest_1.5ml_screwcap'},
             {'display_name': '2 mL Screwcap', 'value': 'opentrons_24_tuberack_generic_2ml_screwcap'},
             {'display_name': '5 mL Screwcap', 'value': 'usascientific_15_tuberack_5000ul'}
-        ]
+        ],
+        default = 'opentrons_24_tuberack_nest_1.5ml_screwcap'
     )
 
 def run(protocol: protocol_api.ProtocolContext):
