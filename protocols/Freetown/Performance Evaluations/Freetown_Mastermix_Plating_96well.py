@@ -6,19 +6,44 @@
 from opentrons import protocol_api
 
 metadata = {
-    'apiLevel': '2.13',
+    'apiLevel': '2.18',
     'protocolName': 'Freetown | Mastermix Plating for Reportable Range',
     'author': 'OP13 LL',
     'description': '''Plates master mix for reportable range experiments [all wells of a 96-well plate]. | 
                         Place completed 2x mastermix in slot A1 of a tube rack [1.5mL tube for 1 plate, 5mL tube for 2+ plates].'''
 }
 
+requirements = {
+    'robotType': 'OT-2'
+}
+
+def add_parameters(parameters: protocol_api.Parameters):
+    
+    parameters.add_int(
+        variable_name = 'number_of_plates',
+        display_name = 'Number of plates',
+        description = 'Number of 96-well plates to prepare; all wells of each plate will be filled.',
+        default = 1,
+        minimum = 1,
+        maximum = 4,
+        unit = 'plate(s)'
+    )
+
+    parameters.add_float(
+        variable_name = 'volume',
+        display_name = 'Volume per well',
+        description = 'Volume of liquid added to each well.',
+        default = 10.0,
+        minimum = 10.0,
+        maximum = 20.0
+    )
+
 def run(protocol: protocol_api.ProtocolContext):
 
     # 0. Initialization
     
-    number_of_plates = 2
-    volume = 10
+    number_of_plates = protocol.params.number_of_plates
+    volume = protocol.params.volume
     
     protocol.home()
 
