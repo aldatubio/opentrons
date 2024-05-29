@@ -112,11 +112,15 @@ csv_reader = csv.reader(csv_file, delimiter = ",")
 dataset = list(csv_reader)
 
 metadata = {
-    'apiLevel': '2.14',
     'protocolName': 'Freetown | RNA Dilutions for Reportable Range',
     'author': 'OP13 LL',
-    'description': '''Performs fourteen-point dilution series. 
+    'description': '''Performs fourteen-point dilution series as described in the Analytical Inclusivity protocol. 
                     DURATION: 20 min.'''
+}
+
+requirements = {
+    'robotType': 'OT-2',
+    'apiLevel': '2.15'
 }
 
 def run(protocol: protocol_api.ProtocolContext):
