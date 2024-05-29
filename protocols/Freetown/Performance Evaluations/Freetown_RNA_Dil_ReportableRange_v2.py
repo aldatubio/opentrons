@@ -119,7 +119,8 @@ def add_parameters(parameters: protocol_api.Parameters):
     parameters.add_bool(
         variable_name = "default_volumes",
         display_name = "Default Volumes",
-        description = "Uses fourteen-point dilution series described in the Analytical Inclusivity protocol, which performs five-fold and two-fold dilutions from 2.5E6 to 5 cp/µL.",
+        # description can only be 100 characters
+        description = "14-point dilution series described in the Analytical Inclusivity protocol (2.5E6 to 5 cp/µL).",
         default = True
     )
 
@@ -146,7 +147,7 @@ def run(protocol: protocol_api.ProtocolContext):
         12,300,300
         13,300,300
         '''
-        
+
     # Parsing csv input - StringIO method treats pasted string as file object
     csv_file = io.StringIO(csv_raw)
     csv_reader = csv.reader(csv_file, delimiter = ",")
