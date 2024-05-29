@@ -61,6 +61,18 @@ def run(protocol: protocol_api.ProtocolContext):
     p300 = protocol.load_instrument('p300_single_gen2', 'right', tip_racks=[p300tips])
 
 
+    # Visualization of deck layout
+
+    mmx_viz = protocol.define_liquid(
+        'Mastermix',
+        '',
+        '#44f'
+    )
+
+    rack['A1'].load_liquid(
+        mmx_viz,
+        number_of_plates * volume * 100
+    )
 
     # 1. Adding mastermix to all wells
 
