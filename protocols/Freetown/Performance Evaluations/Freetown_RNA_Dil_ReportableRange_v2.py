@@ -120,7 +120,7 @@ def add_parameters(parameters: protocol_api.Parameters):
         variable_name = "default_volumes",
         display_name = "Default Volumes",
         # description can only be 100 characters
-        description = "14-point dilution series described in the Analytical Inclusivity protocol (2.5E6 to 5 cp/µL).",
+        description = "14-point dilution series described in the Analytical Inclusivity protocol (2.5E6 to 0.5 cp/µL).",
         default = True
     )
 
