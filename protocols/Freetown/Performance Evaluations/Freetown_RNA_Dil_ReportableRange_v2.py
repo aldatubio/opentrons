@@ -103,14 +103,6 @@ csv_raw = '''1,50,200
 ###
 ###
 
-
-# Parsing csv input - StringIO method treats pasted string as file object
-csv_file = io.StringIO(csv_raw)
-csv_reader = csv.reader(csv_file, delimiter = ",")
-# saving the csv_reader as a list allows us to iterate over the reader more than once -
-# using the reader and doing a "for row in csv_reader" loop consumes the reader
-dataset = list(csv_reader)
-
 metadata = {
     'protocolName': 'Freetown | RNA Dilutions for Reportable Range',
     'author': 'OP13 LL',
@@ -120,13 +112,50 @@ metadata = {
 
 requirements = {
     'robotType': 'OT-2',
-    'apiLevel': '2.15'
+    'apiLevel': '2.18'
 }
+
+def add_parameters(parameters: protocol_api.Parameters):
+    parameters.add_bool(
+        variable_name = "default_volumes",
+        display_name = "Default Volumes",
+        description = "Uses fourteen-point dilution series described in the Analytical Inclusivity protocol, which performs five-fold and two-fold dilutions from 2.5E6 to 5 cp/µL.",
+        default = True
+    )
 
 def run(protocol: protocol_api.ProtocolContext):
 
     protocol.home()
     
+    ###
+    ### csv handling
+    ###
+
+    if protocol.params.default_volumes is True:
+        csv_raw = '''1,50,200
+        2,50,200
+        3,50,200
+        4,50,200
+        5,50,200
+        6,50,200
+        7,100,400
+        8,300,300
+        9,300,300
+        10,300,300
+        11,300,300
+        12,300,300
+        13,300,300
+        '''
+        
+    # Parsing csv input - StringIO method treats pasted string as file object
+    csv_file = io.StringIO(csv_raw)
+    csv_reader = csv.reader(csv_file, delimiter = ",")
+    # saving the csv_reader as a list allows us to iterate over the reader more than once -
+    # using the reader and doing a "for row in csv_reader" loop consumes the reader
+    dataset = list(csv_reader)
+
+
+
     ###
     ### Initialization
     ###
