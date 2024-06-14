@@ -161,11 +161,11 @@ def run(protocol: protocol_api.ProtocolContext):
     ### Initialization
     ###
 
-    diluent_location = 'B1'
+    diluent_location = 'A5'
 
     tubes = protocol.load_labware('opentrons_24_tuberack_eppendorf_1.5ml_safelock_snapcap', 2)
     # custom 25mL tube definition - Eppendorf screw-top
-    diluent = protocol.load_labware('opentrons_6_tuberack_25ml', 1)
+    diluent = protocol.load_labware('usascientific_15_tuberack_5000ul', 1)
 
     p1000tips = protocol.load_labware('opentrons_96_filtertiprack_1000ul', 6)
     p300tips = protocol.load_labware('opentrons_96_filtertiprack_200ul', 3)   
