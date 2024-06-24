@@ -7,13 +7,53 @@ See also:
 
 
 ## Contents
+- [Smoothie errors](#smoothie-errors)
 - [Liquid handling](#liquid-handling)
   - [Viscous liquids](#viscous-liquids)
   - [Robot skips wells](#robot-is-skipping-wells-when-dispensing)
 - [Decreasing tip usage](#robot-is-using-more-tips-than-necessary)
 - [Displaying in-app messages and adding pause steps](#displaying-in-app-messages-and-adding-pause-steps)
 - [Help with building block commands](#help-with-building-block-commands)
-- [Copy-and-paste troubleshooting scripts](#copy-and-paste-troubleshooting-scripts)
+- [Troubleshooting scripts](#troubleshooting-scripts)
+
+## Smoothie errors
+Sometimes, the robot will throw an error during a run, typically looking something like this:
+```
+SmoothieError:
+2M907 A0.1 B0.3 C0.3 X0.3 Y0.3 Z0.8 G4P0.005 G0B2.5 returned ALARM: Hard limit +B
+```
+Smoothieboard is the name of the motor controller board that Opentrons uses (open-source, originally a CNC controller meant for use in 3D printers). This type of error, then, is a hardware error, and is easily fixed by manual manipulation of the robot.
+
+### Homing fail
+A homing fail error might look something like this:
+```
+SmoothieError:
+M907 A0.1 B0.05 C1.0 X0.3 Y0.3 Z0.1 G4P0.005 G28.2C returned ALARM: Homing fail
+```
+These types of errors will have the words `Homing fail` at the end of the error message. The relevant information here is the letter following the G-code: `G28.2K`, where K is one of the following letters:
+
+| Axis Name                                   | Description                                                                      | Limit Switch Location                       |
+| ------------------------------------------- | -------------------------------------------------------------------------------- | ------------------------------------------- |
+| X                                           | Gantry right (+X) and left (-X).                                                 | +X                                          |
+| Y                                           | Gantry back, away from front window (+Y) and forward, towards front window (-Y). | +Y                                          |
+| Z                                           | Left pipette mount up (+Z) and down (-Z).                                        | +Z                                          |
+| A                                           | Right pipette mount up (+A) and down (-A).                                       | +A                                          |
+| B                                           | Left pipette plunger up (+B) and down (-B).                                      | +B                                          |
+| C                                           | Right pipette plunger up (+C) and down (-C).                                     | +C                                          |
+
+The letter code indicates where the robot had issues homing; in our example, the "C" at the end of the error code indicates there was an issue with the right pipette plunger. Usually, re-homing the gantry will solve this issue - try running [`Troubleshooting_HomeGantry.py`](https://github.com/aldatubio/opentrons/blob/main/protocols/Troubleshooting/Troubleshooting_HomeGantry.py), which is a troubleshooting protocol located in `protocols/Troubleshooting`. If the issue persists, Opentrons has some [additional recommendations](https://support.opentrons.com/s/article/SmoothieError-Homing-fail).
+
+### Hard limit
+A hard limit error might look something like this:
+```
+SmoothieError:
+2M907 A0.1 B0.3 C0.3 X0.3 Y0.3 Z0.8 G4P0.005 G0B2.5 returned ALARM: Hard limit +B
+```
+
+These types of errors will have the words `Hard limit` and a `+/-K` at the end of the error message, where `K` could be one of several letters. See the table in the "Homing fail" section for details on what this letter code indicates.
+
+The most frequent hard limit errors seem to be those concerning the pipette plunger up/down (`+/-B` or `+/-C`) - the easiest way to troubleshoot these is to manually pull the pipette plunger down several times in a row to release any static electricity buildup. Usually this simple step fixes the problem; if the problem persists, Opentrons has some [additional recommendations](https://support.opentrons.com/s/article/SmoothieError-Hard-limit#:~:text=X%2FY%20%2D%20Gantry-,Description,%E2%80%9Chard%20limit%20%2BX.%E2%80%9D), or you can try out the [`Troubleshooting_HomeGantry.py`](https://github.com/aldatubio/opentrons/blob/main/protocols/Troubleshooting/Troubleshooting_HomeGantry.py) protocol, which moves the pipettors around to unstick axes/pipettors.
+
 
 ## Liquid handling
 ### Viscous liquids
@@ -176,3 +216,6 @@ Within well plates, Opentrons organizes wells by column, then by row. For exampl
         p300.blow_out(mastermixes['A5'])
     p300.drop_tip()
 ```
+
+## Troubleshooting scripts
+Find troubleshooting scripts in `protocols\Troubleshooting`.
