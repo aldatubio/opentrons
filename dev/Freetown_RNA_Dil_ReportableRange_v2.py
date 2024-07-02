@@ -140,7 +140,7 @@ def run(protocol: protocol_api.ProtocolContext):
         csv_reader = csv.reader(csv_file, delimiter = ",")
 
     else:
-        with open("/data/user_storage/aldatubio/Dilution Series.csv", newline="") as csvfile:
+        with open("/data/user_storage/aldatubio/Dilution Series.csv", newline="") as csv_file:
             csv_reader = csv.reader(csv_file, delimiter = ",")
             next(csv_reader) # skip header row
 
