@@ -108,7 +108,7 @@ def add_parameters(parameters: protocol_api.Parameters):
             {"display_name": "", "value": ""},
             {"display_name": "Dilution Series.csv", "value": "Dilution Series.csv"}
         ],
-        description = "If applicable",
+        description = "If applicable (must switch "Default" to "Off")",
         default = ""
     )
 
@@ -140,7 +140,7 @@ def run(protocol: protocol_api.ProtocolContext):
         csv_reader = csv.reader(csv_file, delimiter = ",")
 
     else:
-        with open("/data/user_storage/aldatubio/Dilution Series.csv", newline="") as csv_file:
+        with open("/data/user_storage/aldatubio/Dilution Series.csv", encoding = "utf-8-sig", newline="") as csv_file:
             csv_reader = csv.reader(csv_file, delimiter = ",")
             next(csv_reader) # skip header row
 
