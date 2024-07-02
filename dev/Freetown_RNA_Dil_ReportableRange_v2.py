@@ -108,7 +108,7 @@ def add_parameters(parameters: protocol_api.Parameters):
             {"display_name": "", "value": ""},
             {"display_name": "Dilution Series.csv", "value": "Dilution Series.csv"}
         ],
-        description = "If applicable (must switch "Default" to "Off")",
+        description = "If applicable (must switch Default Volumes to Off)",
         default = ""
     )
 
