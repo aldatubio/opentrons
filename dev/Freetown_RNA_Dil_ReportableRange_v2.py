@@ -138,16 +138,15 @@ def run(protocol: protocol_api.ProtocolContext):
         # Parsing csv input - StringIO method treats pasted string as file object
         csv_file = io.StringIO(csv_raw)
         csv_reader = csv.reader(csv_file, delimiter = ",")
+            # saving the csv_reader as a list allows us to iterate over the reader more than once -
+        # using the reader and doing a "for row in csv_reader" loop consumes the reader
+        dataset = list(csv_reader)
 
     else:
         with open("/data/user_storage/aldatubio/Dilution Series.csv", encoding = "utf-8-sig", newline="") as csv_file:
             csv_reader = csv.reader(csv_file, delimiter = ",")
             next(csv_reader) # skip header row
-
-
-    # saving the csv_reader as a list allows us to iterate over the reader more than once -
-    # using the reader and doing a "for row in csv_reader" loop consumes the reader
-    dataset = list(csv_reader)
+            dataset = list(csv_reader)
 
 
     ###
