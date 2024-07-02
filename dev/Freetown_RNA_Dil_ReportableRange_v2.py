@@ -103,11 +103,12 @@ def add_parameters(parameters: protocol_api.Parameters):
     )
     parameters.add_str(
         variable_name = "file_name",
-        display_name = "Name of CSV File (if applicable)",
+        display_name = "Name of CSV File", # must be less than 30 characters
         choices = [
             {"display_name": "", "value": ""},
             {"display_name": "Dilution Series.csv", "value": "Dilution Series.csv"}
         ],
+        description = "If applicable",
         default = ""
     )
 
