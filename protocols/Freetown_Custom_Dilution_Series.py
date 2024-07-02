@@ -31,7 +31,8 @@ from opentrons import protocol_api
 metadata = {
     'apiLevel': '2.18',
     'protocolName': 'Freetown | Custom Dilution Series',
-    'author': 'OP13 LL'
+    'author': 'OP13 LL',
+    'description': 'Custom dilution series.'
 }
 
 requirements = {
