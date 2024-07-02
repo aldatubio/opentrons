@@ -1,72 +1,19 @@
 '''
 Project Freetown
-RNA Dilutions for Reportable Range
-Updated 2024-05-22
+Custom Dilution Series
+Updated 2024-07-02
 Author: OP13 LL
-
-Adapted from Project Pretoria's RNA Dilutions for Reportable Range protocol
-
 
 INSTRUCTIONS FOR USE
 
-This protocol takes parameters (volumes, number of tubes/dilutions) as a pasted csv table
-(as such, this protocol could be adapted easily for other purposes).
+This protocol takes parameters (volumes, number of tubes/dilutions) in csv format -
+either as a pasted list of values, or as an imported csv file "Dilution Series.csv".
 
-•	Paste csv data as list into "csv_raw" variable. Ensure that the pasted list only concerns tube dilutions
-    performed by the robot - for example, the stock/starting tube ("dilution 0") should not be included in the list.
-•	If needed, you can also change the position of the tube of diluent - "diluent_location" variable.
-
-----------------------------
-  Stock Conc.    2.5E+6 µL  
-----------------------------
-  Dil. Factor    Variable   
-  Vol Per Well   10         
-  tRNA Needed    3500 µL    
-----------------------------
-
-------------------------------------------------------------
-  #    Stock Conc.   Copies / Well   Dil Factor   # Wells  
-------------------------------------------------------------
-   1   2.5E+6 cp/µL   2.5E+7 cp/rxn            8         4  
-   2   5.0E+5 cp/µL   5.0E+6 cp/rxn            5         4  
-   3   1.0E+5 cp/µL   1.0E+6 cp/rxn            5         4  
-   4   2.0E+4 cp/µL   2.0E+5 cp/rxn            5         4  
-   5    4,000 cp/µL   4.0E+4 cp/rxn            5         4  
-   6      800 cp/µL   8.0E+3 cp/rxn            5         4  
-   7      160 cp/µL    1,600 cp/rxn            5         4  
-   8       32 cp/µL      320 cp/rxn            5         4  
-   9       16 cp/µL      160 cp/rxn            2         4  
-  10        8 cp/µL       80 cp/rxn            2         8  
-  11        4 cp/µL       40 cp/rxn            2         8  
-  12        2 cp/µL       20 cp/rxn            2        12  
-  13        1 cp/µL       10 cp/rxn            2        12  
-  14       .5 cp/µL        5 cp/rxn            2        12  
-     Negative                                            8  
-------------------------------------------------------------
-
-Analytical Inclusivity
-
-Analytical inclusivity is the ability of the assay to detect all geographically and genetically diverse
-Ebolavirus and Marburgvirus species. The analytical inclusivity will a reportable range for each of the isolates,
-allowing us to capture our dynamic range. This approach 1) allows us to determine the upper limit of detection
-without the need for incredibly high concentrations of inactivated virus (which we won’t be able to obtain)
-and 2) determine the expected lower limit of detection so that the analytical sensitivity work is designed appropriately
-(as it is 4–5 concentrations around the LOD).
-
-
-Freetown Design 
-
-•	The same reportable range that was used for Project Cairo (run on a single 96-well plate). 
-•	Run each of the templates three times, to be done on different days. 
-•	The mastermix can be prepared by hand and plated by one Opentrons robot.
-•	The templates can be diluted and prepared by a second Opentrons robot. 
-
-
-Tube Setup
-
-25mL tube: B1 of 6-ct 50mL rack
-Single-use RNA aliquot: A1 of 24-ct 1.5mL rack
-Empty 1.5mL tubes: B1-D1, A2-D2, A3-D3, and A4-B4 [first 4 columns] of 24-ct 1.5mL rack
+1. OPTION 1: Paste csv data as list into "csv_raw" variable. Ensure that the pasted list only concerns tube dilutions
+   performed by the robot - for example, the stock/starting tube ("dilution 0") should not be included in the list.
+2. OPTION 2: Using the provided "Dilution Series.csv" file as a template, fill out the file with your dilution series.
+   Then, drag the file onto the "Upload CSV to Opentrons" widget to securely copy the file to Opentrons via SSH.
+2. If needed, you can also change the position of the tube of diluent - "diluent_location" variable.
 
 '''
 
@@ -83,10 +30,8 @@ from opentrons import protocol_api
 
 metadata = {
     'apiLevel': '2.18',
-    'protocolName': 'Freetown | RNA Dilutions for Reportable Range',
-    'author': 'OP13 LL',
-    'description': '''Performs fourteen-point dilution series as described in the Analytical Inclusivity protocol. 
-                    DURATION: 20 min.'''
+    'protocolName': 'Freetown | Custom Dilution Series',
+    'author': 'OP13 LL'
 }
 
 requirements = {
@@ -108,8 +53,40 @@ def add_parameters(parameters: protocol_api.Parameters):
             {"display_name": "", "value": ""},
             {"display_name": "Dilution Series.csv", "value": "Dilution Series.csv"}
         ],
-        description = "If applicable (must switch Default Volumes to Off)",
+        description = "If applicable (must switch Default Volumes to Off).",
         default = ""
+    )
+    parameters.add_str(
+        variable_name = "diluent_rack",
+        display_name = "Diluent Tube",
+        choices = [
+            {"display_name": "1.5 mL", "value": "opentrons_24_tuberack_eppendorf_1.5ml_safelock_snapcap"},
+            {"display_name": "5 mL", "value": "usascientific_15_tuberack_5000ul"},
+            {"display_name": "25 mL", "value": "opentrons_6_tuberack_25ml"}
+        ],
+        default = "usascientific_15_tuberack_5000ul"
+    )
+    parameters.add_str(
+        variable_name = "left_pipettor",
+        display_name = "Left Pipette",
+        description = "Pipette installed on left mount.",
+        choices = [
+            {"display_name": "1-Channel 20 µL", "value": "p20_single_gen2"},
+            {"display_name": "1-Channel 300 µL", "value": "p300_single_gen2"},
+            {"display_name": "1-Channel 1000 µL", "value": "p1000_single_gen2"}
+        ],
+        default = "p1000_single_gen2"
+    )
+    parameters.add_str(
+        variable_name = "right_pipettor",
+        display_name = "Right Pipette",
+        description = "Pipette installed on right mount.",
+        choices = [
+            {"display_name": "1-Channel 20 µL", "value": "p20_single_gen2"},
+            {"display_name": "1-Channel 300 µL", "value": "p300_single_gen2"},
+            {"display_name": "1-Channel 1000 µL", "value": "p1000_single_gen2"}
+        ],
+        default = "p300_single_gen2"
     )
 
 def run(protocol: protocol_api.ProtocolContext):
@@ -153,16 +130,46 @@ def run(protocol: protocol_api.ProtocolContext):
     ### Initialization
     ###
 
-    diluent_location = 'A5'
+    diluent_location = 'A1'
 
     tubes = protocol.load_labware('opentrons_24_tuberack_eppendorf_1.5ml_safelock_snapcap', 2)
-    # custom 25mL tube definition - Eppendorf screw-top
-    diluent = protocol.load_labware('usascientific_15_tuberack_5000ul', 1)
+    diluent = protocol.load_labware(protocol.params.diluent_rack, 1)
 
-    p1000tips = protocol.load_labware('opentrons_96_filtertiprack_1000ul', 6)
-    p300tips = protocol.load_labware('opentrons_96_filtertiprack_200ul', 3)   
-    p1000 = protocol.load_instrument('p1000_single_gen2', 'left', tip_racks=[p1000tips])
-    p300 = protocol.load_instrument('p300_single_gen2', 'right', tip_racks=[p300tips])
+    if protocol.params.left_pipettor == "p20_single_gen2":
+        left_tips = protocol.load_labware('opentrons_96_filtertiprack_20ul', 6)
+        left_max_vol = 20
+    elif protocol.params.left_pipettor == "p300_single_gen2":
+        left_tips = protocol.load_labware('opentrons_96_filtertiprack_200ul', 6)
+        left_max_vol = 200
+    elif protocol.params.left_pipettor == "p1000_single_gen2":
+        left_tips = protocol.load_labware('opentrons_96_filtertiprack_1000ul', 6)
+        left_max_vol = 1000
+    
+    left_pipette = protocol.load_instrument(protocol.params.left_pipettor, 'left', tip_racks=[left_tips])
+
+    if protocol.params.right_pipettor == "p20_single_gen2":
+        right_tips = protocol.load_labware('opentrons_96_filtertiprack_20ul', 3)
+        right_max_vol = 20
+    elif protocol.params.right_pipettor == "p300_single_gen2":
+        right_tips = protocol.load_labware('opentrons_96_filtertiprack_200ul', 3)
+        right_max_vol = 200
+    elif protocol.params.right_pipettor == "p1000_single_gen2":
+        right_tips = protocol.load_labware('opentrons_96_filtertiprack_1000ul', 3)
+        right_max_vol = 1000
+    
+    right_pipette = protocol.load_instrument(protocol.params.left_pipettor, 'right', tip_racks=[right_tips])
+
+
+    if left_max_vol > right_max_vol:
+        larger_pipette = left_pipette
+        larger_max_vol = left_max_vol
+        smaller_pipette = right_pipette
+        smaller_max_vol = right_max_vol
+    else:
+        larger_pipette = right_pipette
+        larger_max_vol = right_max_vol
+        smaller_pipette = left_pipette
+        smaller_max_vol = left_max_vol
 
     
     ### Visualization of deck layout - API 2.14 and above only!
@@ -224,17 +231,17 @@ def run(protocol: protocol_api.ProtocolContext):
         diluent_vols.append(int(row[2]))
         tubes_to_fill.append(int(row[0]))
 
-        # Choose pipette to use: first, create list: any time a volume greater than 200 is detected, a "1" gets added to the list
-        if int(row[2]) > 200:
+        # Choose pipette to use: first, create list: any time a volume greater than smaller max vol is detected, a "1" gets added to the list
+        if int(row[2]) > smaller_max_vol:
             counter.append(1)
         else:
             counter.append(0)
     
-    # Choosing pipette: check: are there any "1"s in the list? if so, a volume greater than 200 is present, and we will need the P1000
+    # Choosing pipette: check: are there any "1"s in the list? if so, a volume greater than smaller max vol is present, and we will need the larger pipette
     if sum(counter) > 0:
-        pipette = p1000
+        pipette = larger_pipette
     else:
-        pipette = p300
+        pipette = smaller_pipette
 
     pipette.distribute(
         diluent_vols,
@@ -252,12 +259,12 @@ def run(protocol: protocol_api.ProtocolContext):
     for row in dataset:
 
         # choose pipette
-        if int(row[1]) > 200:
-            pipette = p1000
-            pipette_max_vol = 1000
+        if int(row[1]) > smaller_max_vol:
+            pipette = larger_pipette
+            pipette_max_vol = larger_max_vol
         else:
-            pipette = p300
-            pipette_max_vol = 200
+            pipette = smaller_pipette
+            pipette_max_vol = smaller_max_vol
 
         # set mixing volume - must be less than max pipette volume
         if (int(row[1]) + int(row[2]))*0.8 < pipette_max_vol:
