@@ -5,7 +5,7 @@ This guide walks you through the use of the custom dilutions protocol:
 3. Clicking on the `Freetown | Custom Dilution Series` protocol in the Opentrons app and following the app's instructions
 
 ## Creating a custom dilution series
-In an Excel file with the columns shown, list the dilutions you'd like the robot to perform. (Do not include any manually-prepared dilutions in this file.) Using the "Save As" option in Excel, save this workbook as `Dilution Series.csv`, ensuring that you've selected the `CSV - UTF-8` save option from the drop-down menu. 
+In an Excel file with the columns shown, list the dilutions you'd like the robot to perform - up to 23 total dilutions. (Do not include any manually-prepared dilutions in this file.) Using the "Save As" option in Excel, save this workbook as `Dilution Series.csv`, ensuring that you've selected the `CSV - UTF-8` save option from the drop-down menu. 
 <p align = "left">
   <img src = "https://github.com/aldatubio/opentrons/blob/main/dev/images/custom_dil_guide/Screenshot%202024-07-08%20125841.png"
     width = "50%">
@@ -50,14 +50,11 @@ Use the next two screens to choose the robot you want, as well as pipettes and d
 </p>
 
 > :warning: **Warning:** If you want to use your uploaded CSV, make sure `Default Volumes` is **off** and check that the name of the CSV file is correct.
+</br>
 
-
-
-[Image 1]: https://github.com/aldatubio/opentrons/blob/main/dev/images/custom_dil_guide/Screenshot%202024-07-08%20125841.png
-[Image 2]: https://github.com/aldatubio/opentrons/blob/main/dev/images/custom_dil_guide/Screenshot%202024-07-08%20130017.png
-[Image 3]: https://github.com/aldatubio/opentrons/blob/main/dev/images/custom_dil_guide/Screenshot%202024-07-08%20130037.png
-[Image 4]: https://github.com/aldatubio/opentrons/blob/main/dev/images/custom_dil_guide/Screenshot%202024-07-08%20130059.png
-[Image 5]: https://github.com/aldatubio/opentrons/blob/main/dev/images/custom_dil_guide/Screenshot%202024-07-08%20130120.png
-[Image 6]: https://github.com/aldatubio/opentrons/blob/main/dev/images/custom_dil_guide/Screenshot%202024-07-08%20130554.png
-[Image 7]: https://github.com/aldatubio/opentrons/blob/main/dev/images/custom_dil_guide/Screenshot%202024-07-08%20130621.png
-[Image 8]: https://github.com/aldatubio/opentrons/blob/main/dev/images/custom_dil_guide/Screenshot%202024-07-08%20130656.png
+## Running the protocol
+Follow the Opentrons app's guidance to set up the robot deck and prepare for the run. Use the `Labware` and `Liquids` drop-down to see where items need to be placed on the deck. Once the deck layout is correct, click the blue `Start Run` button.
+<p align = "left">
+  <img src = "https://github.com/aldatubio/opentrons/blob/main/dev/images/custom_dil_guide/Screenshot%202024-07-08%20130656.png"
+    width = "75%">
+</p>
