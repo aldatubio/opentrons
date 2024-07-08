@@ -1,6 +1,6 @@
 # Custom Dilution Protocol - How to use
 This guide walks you through the use of the custom dilutions protocol:
-1. Making a custom dilution series and saving it as a CSV file
+1. Making a custom dilution series in Excel and saving it as a CSV file
 2. Uploading the dilution series to the robot using the `Upload CSV to Opentrons` drag-and-drop widget
 3. Clicking on the `Freetown | Custom Dilution Series` protocol in the Opentrons app and following the app's instructions
 
@@ -43,11 +43,15 @@ On the next page, click the blue `Start setup` button.
 
 Use the next two screens to choose the robot you want, as well as pipettes and diluent tube size. 
 <p float = "left" align = "left">
-  <img src = "https://github.com/aldatubio/opentrons/blob/main/dev/images/custom_dil_guide/Screenshot%202024-07-08%20130554.png"
-    width = "29%" />
-  <img src = "https://github.com/aldatubio/opentrons/blob/main/dev/images/custom_dil_guide/Screenshot%202024-07-08%20130621.png"
+  <img src = "https://raw.githubusercontent.com/aldatubio/opentrons/main/dev/images/custom_dil_guide/Screenshot%202024-07-08%20130554.png"
+    width = "30%" />
+  <img src = "https://raw.githubusercontent.com/aldatubio/opentrons/main/dev/images/custom_dil_guide/Screenshot%202024-07-08%20130621.png"
     width = "30%" />
 </p>
+
+> :warning: **Warning:** If you want to use your uploaded CSV, make sure `Default Volumes` is **off** and check that the name of the CSV file is correct.
+
+
 
 [Image 1]: https://github.com/aldatubio/opentrons/blob/main/dev/images/custom_dil_guide/Screenshot%202024-07-08%20125841.png
 [Image 2]: https://github.com/aldatubio/opentrons/blob/main/dev/images/custom_dil_guide/Screenshot%202024-07-08%20130017.png
