@@ -1,11 +1,19 @@
-# SSH Documentation
-## Opentrons pages
-- **[Setup](https://support.opentrons.com/s/article/Setting-up-SSH-access-to-your-OT-2)**
-- **[Uploading / downloading files](https://support.opentrons.com/s/article/Copying-files-to-and-from-your-OT-2-with-SCP)**
+# Step-by-step: implementing user-friendly CSV functionality
+## Setting up and using SSH
+To set up SSH, I used Opentrons' setup guide [here](https://support.opentrons.com/s/article/Setting-up-SSH-access-to-your-OT-2). There is no password for the SSH key pair.
+The basic SSH command to connect to a robot is as follows:
+```pwsh
+ssh -i ot2_ssh_key root@ROBOT_IP
+```
+Find robot IP addresses by opening the Opentrons app, then navigating to **Devices** > robot > **Robot Settings** > **Networking**. Generally, you'll want to use the **Wireless IP**.
+</br>
 
-## Using PowerShell
-- Commonly used Linux commands work in PowerShell: `mkdir`, `rm`, etc.
+After establishing a key pair, I used Opentrons' file copying guide [here](https://support.opentrons.com/s/article/Copying-files-to-and-from-your-OT-2-with-SCP) to experiment with file uploading/downloading.
+- After establishing an SSH connection, you can use Linux commands as usual to navigate around the robot's file structure: `mkdir`, `rm`, etc.
 - To close an SSH session, type `exit`.
+
+
+
 
 ## Making a drag-and-drop shortcut
 - Create the shortcut:
