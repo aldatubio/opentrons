@@ -158,7 +158,7 @@ def run(protocol: protocol_api.ProtocolContext):
         right_tips = protocol.load_labware('opentrons_96_filtertiprack_1000ul', 3)
         right_max_vol = 1000
     
-    right_pipette = protocol.load_instrument(protocol.params.left_pipettor, 'right', tip_racks=[right_tips])
+    right_pipette = protocol.load_instrument(protocol.params.right_pipettor, 'right', tip_racks=[right_tips])
 
 
     if left_max_vol > right_max_vol:
