@@ -1,7 +1,7 @@
 # Step-by-step: implementing user-friendly CSV functionality
 ## PowerShell scripting
 ### Setting up and using SSH
-To set up SSH, I used Opentrons' setup guide [here](https://support.opentrons.com/s/article/Setting-up-SSH-access-to-your-OT-2). There is no password for the SSH key pair.
+To set up SSH, I used Opentrons' setup guide [here](https://support.opentrons.com/s/article/Setting-up-SSH-access-to-your-OT-2). There is no password for the SSH key pair. Contrary to what Opentrons recommends, I found that each connected computer needs both the private *and* public SSH keys in their `user` folder - without adding the public key, I had issues getting the lab laptop to upload files.
 The basic SSH command to connect to a robot is as follows:
 ```pwsh
 ssh -i ot2_ssh_key root@ROBOT_IP
