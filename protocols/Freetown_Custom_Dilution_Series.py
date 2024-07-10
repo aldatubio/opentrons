@@ -17,6 +17,7 @@ either as a pasted list of values, or as an imported csv file "Dilution Series.c
 
 '''
 
+from datetime import datetime
 import csv
 import io
 from opentrons import protocol_api
@@ -93,6 +94,13 @@ def add_parameters(parameters: protocol_api.Parameters):
 def run(protocol: protocol_api.ProtocolContext):
 
     protocol.home()
+
+    ### dummy param - forces protocol reanalysis to fix bug described here:
+    ### https://github.com/Opentrons/opentrons/issues/14598
+    
+    now = datetime.now()
+    protocol.comment(f"Run started {now}")
+    
     
     ###
     ### csv handling
@@ -122,10 +130,12 @@ def run(protocol: protocol_api.ProtocolContext):
         protocol.comment("Using default CSV data")
 
     else:
-        with open("/data/user_storage/aldatubio/Dilution Series.csv", encoding = "utf-8-sig", newline="") as csv_file:
+        file_path = "/data/user_storage/aldatubio/Dilution Series.csv"
+        with open(file_path, encoding = "utf-8-sig", newline="") as csv_file:
             csv_reader = csv.reader(csv_file, delimiter = ",")
             next(csv_reader) # skip header row
             dataset = list(csv_reader)
+            protocol.comment(f"Loading CSV data from {file_path}")
             protocol.comment(f"Loaded CSV data: {dataset}")
 
 
