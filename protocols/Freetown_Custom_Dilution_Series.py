@@ -245,7 +245,7 @@ def run(protocol: protocol_api.ProtocolContext):
         tubes_to_fill.append(int(row[0]))
 
         # Choose pipette to use: first, create list: any time a volume greater than smaller max vol is detected, a "1" gets added to the list
-        if int(row[2]) > smaller_max_vol:
+        if float(row[2]) > float(smaller_max_vol):
             counter.append(1)
         else:
             counter.append(0)
@@ -278,7 +278,7 @@ def run(protocol: protocol_api.ProtocolContext):
     for row in dataset:
 
         # choose pipette
-        if float(row[1]) > smaller_max_vol:
+        if float(row[1]) > float(smaller_max_vol):
             pipette = larger_pipette
             pipette_max_vol = larger_max_vol
         else:
@@ -289,7 +289,7 @@ def run(protocol: protocol_api.ProtocolContext):
         if (float(row[1]) + float(row[2]))*0.8 < pipette_max_vol:
             mix_vol = (float(row[1]) + float(row[2]))*0.8
         else:
-            mix_vol = pipette_max_vol
+            mix_vol = float(pipette_max_vol)
         
         pipette.transfer(
             float(row[1]),
