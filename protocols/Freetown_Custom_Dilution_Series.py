@@ -243,6 +243,8 @@ def run(protocol: protocol_api.ProtocolContext):
         # ensure that row data is wrapped in int() - needs to be number type, not string
         diluent_vols.append(int(row[2]))
         tubes_to_fill.append(int(row[0]))
+        protocol.comment(f"Diluent volumes: {diluent_vols}")
+        protocol.comment(f"Tubes being filled: {tubes_to_fill}")
 
         # Choose pipette to use: first, create list: any time a volume greater than smaller max vol is detected, a "1" gets added to the list
         if int(row[2]) > smaller_max_vol:
