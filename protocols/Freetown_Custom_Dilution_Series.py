@@ -259,13 +259,16 @@ def run(protocol: protocol_api.ProtocolContext):
     else:
         pipette = smaller_pipette
 
-    pipette.distribute(
+    pipette.pick_up_tip()
+    pipette.transfer(
         diluent_vols,
         diluent[diluent_location],
         [tubes.wells()[index] for index in tubes_to_fill],
         blow_out = True,
-        blowout_location = "source well"
+        blowout_location = "source well",
+        new_tip = "Never"
     )
+    pipette.drop_tip()
     
 
     ###
