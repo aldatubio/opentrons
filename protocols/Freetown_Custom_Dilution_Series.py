@@ -210,7 +210,7 @@ def run(protocol: protocol_api.ProtocolContext):
 
     total_diluent_vol = 200
     for row in dataset:
-        total_diluent_vol = total_diluent_vol + int(row[2])
+        total_diluent_vol = total_diluent_vol + float(row[2])
 
     diluent[diluent_location].load_liquid(
         diluent_viz,
@@ -219,7 +219,7 @@ def run(protocol: protocol_api.ProtocolContext):
 
     tubes['A1'].load_liquid(
         RNA_viz,
-        int(dataset[0][1]) + 20
+        float(dataset[0][1]) + 20
     )
 
     for row in dataset:
@@ -278,7 +278,7 @@ def run(protocol: protocol_api.ProtocolContext):
     for row in dataset:
 
         # choose pipette
-        if int(row[1]) > smaller_max_vol:
+        if float(row[1]) > smaller_max_vol:
             pipette = larger_pipette
             pipette_max_vol = larger_max_vol
         else:
@@ -286,13 +286,13 @@ def run(protocol: protocol_api.ProtocolContext):
             pipette_max_vol = smaller_max_vol
 
         # set mixing volume - must be less than max pipette volume
-        if (int(row[1]) + int(row[2]))*0.8 < pipette_max_vol:
-            mix_vol = (int(row[1]) + int(row[2]))*0.8
+        if (float(row[1]) + float(row[2]))*0.8 < pipette_max_vol:
+            mix_vol = (float(row[1]) + float(row[2]))*0.8
         else:
             mix_vol = pipette_max_vol
         
         pipette.transfer(
-            int(row[1]),
+            float(row[1]),
             [tubes.wells()[int(row[0]) - 1]],
             [tubes.wells()[int(row[0])]],
             mix_after = (
