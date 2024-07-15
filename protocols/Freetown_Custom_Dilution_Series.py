@@ -241,7 +241,7 @@ def run(protocol: protocol_api.ProtocolContext):
     for row in dataset:
 
         # ensure that row data is wrapped in int() - needs to be number type, not string
-        diluent_vols.append(int(row[2]))
+        diluent_vols.append(float(row[2]))
         tubes_to_fill.append(int(row[0]))
 
         # Choose pipette to use: first, create list: any time a volume greater than smaller max vol is detected, a "1" gets added to the list
