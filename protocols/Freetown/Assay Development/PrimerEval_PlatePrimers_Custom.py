@@ -1,21 +1,21 @@
 # # Primer Evaluation | Plating Primers
-# **Updated 2024-10-28** <br>
+# **Updated 2024-10-28**
 # **Author: OP13 LL**
 # 
-# **Purpose:** Plate 64 primer pairs in triplicate on a 384-well plate.
+# **Purpose:** Plate n^2 primer pairs in triplicate on a 384-well plate.
 # **Duration:** 35 min
 # 
 # **Execution:** This script fills a 384-well plate as follows:
 #  - **STEP 1: Forward primers (15 min)**
-#      - Rows A & I: forward primer 1
-#      - Rows B & J: forward primer 2
+#      - Rows A & n+1: forward primer 1
+#      - Rows B & n+2: forward primer 2
 #      - ...
-#      - Rows H & P: forward primer 8
+#      - Rows n & n*2: forward primer n
 #  - **STEP 2: Reverse primers (20 min)**
 #      - Columns 1-3: reverse primer 1
 #      - Columns 4-6: reverse primer 2
 #      - ...
-#      - Columns 22-24: reverse primer 8
+#      - Columns n*3 - (n+1)*3: reverse primer n
 #      
 # **Reaction (total 3uL per well):**
 #  - 1.5µL 13X forward primer
@@ -24,25 +24,43 @@
 # **Deck setup:**
 #  - **2:** Applied Biosystems 384-well MicroAmp plate
 #  - **5:** 24-count 1.5mL snap cap tube rack, with tubes as follows:
-#      - tubes A1-4, B1-4: 13X forward primers (100µL each)
-#      - tubes C1-4, D1-4: 13X reverse primers (100µL each)
+#      - tubes A1-(n/2), B1-(n/2): 13X forward primers (100µL each)
+#      - tubes C1-(n/2), D1-(n/2): 13X reverse primers (100µL each)
 #  - **6:** 96-count 20µL tip rack (protocol uses 16 tips)
-#
-# ![2022-11-22_8x8primerScreen_decksetup.png](attachment:2022-11-22_8x8primerScreen_decksetup.png)
 
 
 from opentrons import protocol_api
-import math
 
 metadata = {
-    'apiLevel': '2.13',
+    'apiLevel': '2.20',
     'protocolName': 'Primer Evaluation | Primer Plating',
     'author': 'OP13 LL',
-    'description': '''For use in 7B10 robot. | 
-                        LIQUID SETUP:
-                        1.5mL tubes: tubes A1-4, B1-4 = forward primers (100µL each); tubes C1-4, D1-4 = reverse primers (100µL each).
-                        '''
+    'description': 'Plates custom number of primer pairs on 384-well plate in triplicate.'
 }
+
+requirements = {
+    'robotType': 'OT-2'
+}
+
+def add_parameters(parameters: protocol_api.Parameters):
+
+    parameters.add_int(
+        variable_name = 'num_primers',
+        display_name = 'Number of primers',
+        description = 'Number of forward / reverse primers. For example, for an 8x8 grid, type "8".',
+        default = 8,
+        minimum = 1,
+        maximum = 8
+    )
+    
+    parameters.add_float(
+        variable_name = 'primer_volume',
+        display_name = 'Primer Volume',
+        default = 1.5,
+        minimum = 1.0,
+        maximum = 20.0,
+        unit = 'µL'
+    )
 
 def run(protocol: protocol_api.ProtocolContext):
 
@@ -50,18 +68,18 @@ def run(protocol: protocol_api.ProtocolContext):
 
     # user-defined variables - edit as necessary
     # volume of primers to pipette (uL)
-    primerVolume = 1.5
+    primer_volume = protocol.params.primer_volume
     # height of tip above bottom of well when dispensing (mm)
-    reversePrimerTipHeight = 4.5
+    reverse_primer_tip_height = 4.5
     # number of forward / reverse primers being tested
-    numPrimers = 3
+    num_primers = protocol.params.num_primers
 
     protocol.home()
 
     # deck setup
     # attribute = protocol.load_labware('name', position)
-    p20tips = protocol.load_labware('opentrons_96_tiprack_20uL', 6)
-    reservoir = protocol.load_labware('opentrons_24_tuberack_eppendorf_1.5ml_safelock_snapcap', 5)
+    p20tips = protocol.load_labware('opentrons_96_tiprack_20uL', 3)
+    primers = protocol.load_labware('opentrons_24_tuberack_eppendorf_1.5ml_safelock_snapcap', 5)
     plate = protocol.load_labware('appliedbiosystemsmicroamp_384_wellplate_40ul', 2)
 
     # pipette initialization/setup
@@ -70,76 +88,38 @@ def run(protocol: protocol_api.ProtocolContext):
 
     # 1. FORWARD PRIMERS | 15 min
     # fill pairs of rows with the correct forward primers
-    # rows A and I get forward primer 1, rows B and J get forward primer 2, etc.
-    # use 1 tip per primer
 
-    # tubes A1-A4: forward primers 1-4
-    for i in range(math.ceil(numPrimers/2)):
-        p20.pick_up_tip()                           # by specifying exactly when to get a new tip (and disabling
-        p20.distribute(                             # auto-new tip), robot only uses one tip per loop iteration
-            primerVolume,
-            reservoir['A'+str(i+1)],
-            plate.rows()[i][:3*numPrimers],                        # dispense into row with index i (A-D)
-            new_tip = 'never'
-        )
+    for i in range(num_primers):
+        
+        wells_to_plate = []
+        wells_to_plate = list(range(i, num_primers*48, 16))                 # first row: primer 1 --> row A, for columns up to 3*num_primers
+        wells_to_plate += list(range(num_primers + i, num_primers*49, 16))  # second row: primer 1 --> row num_primers, for columns up to 3*num_primers
 
         p20.distribute(
-            primerVolume,
-            reservoir['A'+str(i+1)],
-            plate.rows()[i+numPrimers][:3*numPrimers],                      # dispense into row with index i+numPrimers (ex. 8 primers: I-L)
-            new_tip = 'never'                      
+            primer_volume,
+            primers.wells()[i],
+            [plate.wells()[well] for well in wells_to_plate]
         )
-        p20.drop_tip()
 
-    protocol.pause()
-    protocol.comment('Primer F1-F4 plating complete. Add forward primers 5-8 in slots B1-4.')
-
-    # tubes B1-B4: forward primers 5-8
-    for i in range(math.floor(numPrimers/2)):
-        p20.pick_up_tip()
-        p20.distribute(
-            primerVolume,
-            reservoir['B'+str(i+1)],
-            plate.rows()[i+math.ceil(numPrimers/2)],         # dispense into row with index i+4 (E-H)
-            new_tip = 'never'
-        )
-        p20.distribute(
-            primerVolume,
-            reservoir['B'+str(i+1)],
-            plate.rows()[i+numPrimers+math.ceil(numPrimers/2)],                     # dispense into row with index i+12 (M-P)
-            new_tip = 'never'
-        )
-        p20.drop_tip()
-
-    protocol.pause()
-    protocol.comment('Forward primer plating complete. Add reverse primers 1-4 in slots C1-4.')
 
     # 2. REVERSE PRIMERS | 20 min
     # fill trios of columns with the correct reverse primers
     # columns 1-3 get reverse primer 1, columns 4-6 get reverse primer 2, etc.
-    # use 1 tip per primer
 
     # first, adjust dispense height (in mm) - don't touch forward primers in wells
-    p20.well_bottom_clearance.dispense = reversePrimerTipHeight
+    p20.well_bottom_clearance.dispense = reverse_primer_tip_height
 
-    # tubes C1-C4: reverse primers 1-4
-    for i in range(math.ceil(numPrimers/2)):
+    for i in range(num_primers):
+
+        wells_to_plate = []
+        wells_to_plate = list(range(i*48, i*48 + 2*num_primers))                # first column: primer 1 --> column 1, for rows up to 2*num_primers
+        wells_to_plate += list(range(i*48 + 16, i*48 + 2*num_primers + 16))     # second column: primer 1 --> column 2, for rows up to 2*num_primers
+        wells_to_plate += list(range(i*48 + 32, i*48 + 2*num_primers + 32))     # third column: primer 1 --> column 3, for rows up to 2*num_primers
+
         p20.distribute(
-            primerVolume,
-            reservoir['C'+str(i+1)],
-            plate.columns()[3*i:3*(1+i)][:numPrimers*2],             # columns 1-12 (indices 0-11)
-            touch_tip = True
-        )
-
-    protocol.pause()
-    protocol.comment('Primer R1-R4 plating complete. Add reverse primers 5-8 in slots D1-4.')
-
-    # tubes D1-D4: reverse primers 5-8
-    for i in range(math.floor(numPrimers/2)):
-        p20.distribute(
-            primerVolume,
-            reservoir['D'+str(i+1)],
-            plate.columns()[3*(math.ceil(numPrimers/2)+i):3*(math.ceil(numPrimers/2) + 1 + i)][:numPrimers*2],         # columns 13-24 (indices 12-23)
+            primer_volume,
+            primers.wells()[i + 8],
+            [plate.wells()[well] for well in wells_to_plate],
             touch_tip = True
         )
 
