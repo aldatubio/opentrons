@@ -86,6 +86,53 @@ def run(protocol: protocol_api.ProtocolContext):
     p20 = protocol.load_instrument('p20_single_gen2', 'left', tip_racks=[p20tips])
 
 
+    ### Visualization of deck layout - API 2.14 and above only!
+    ### To use protocol simulator, downgrade this protocol to 2.13 and comment out this section
+    
+    # ************************************
+    f_primer_viz = protocol.define_liquid(
+        'Forward primers',
+        '#44f'
+    )
+
+    r_primer_viz = protocol.define_liquid(
+        'Reverse primers',
+        '#f44'
+    )
+
+    empty_viz = protocol.define_liquid(
+        'Wells to be plated',
+        '#777'
+    )
+
+    for i in num_primers:
+        primers[i].load_liquid(
+            f_primer_viz,
+            (6 * num_primers * primer_volume) * 1.1 + 10 #10% excess + 10 µL
+        )
+
+    for i in num_primers:
+        primers[i+8].load_liquid(
+            r_primer_viz,
+            (6 * num_primers * primer_volume) * 1.1 + 10 #10% excess + 10 µL
+        )
+
+
+    wells_to_plate_viz = []
+    for i in range(num_primers):
+        wells_to_plate_viz += list(range(i, num_primers*48, 16))                 
+        wells_to_plate_viz += list(range(num_primers + i, num_primers*49, 16))
+    
+    for well in wells_to_plate_viz:
+        plate.wells()[well].load_liquid(
+            empty_viz,
+            0
+        )
+    
+
+    ### **********************************
+
+
     # 1. FORWARD PRIMERS | 15 min
     # fill pairs of rows with the correct forward primers
 
