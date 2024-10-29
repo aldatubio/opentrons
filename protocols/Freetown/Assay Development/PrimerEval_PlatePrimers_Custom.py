@@ -106,13 +106,13 @@ def run(protocol: protocol_api.ProtocolContext):
     )
 
     for i in range(num_primers):
-        primers[i].load_liquid(
+        primers.wells()[i].load_liquid(
             f_primer_viz,
             (6 * num_primers * primer_volume) * 1.1 + 10 #10% excess + 10 µL
         )
 
     for i in range(num_primers):
-        primers[i+8].load_liquid(
+        primers.wells()[i+8].load_liquid(
             r_primer_viz,
             (6 * num_primers * primer_volume) * 1.1 + 10 #10% excess + 10 µL
         )
