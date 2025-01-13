@@ -142,8 +142,8 @@ def run(protocol: protocol_api.ProtocolContext):
     tubes.wells_by_name()[higher_conc_loc].load_liquid(higher_primer_viz, 250*p)
     wells_to_plate_viz = sum(wells, []) #flatten list
     
-    for well in wells_to_plate_viz:
-        tubes.wells()[well].load_liquid(
+    for well_name in wells_to_plate_viz:
+        tubes.wells_by_name()[well_name].load_liquid(
             empty_viz,
             0
         )
