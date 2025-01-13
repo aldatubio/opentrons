@@ -67,8 +67,8 @@ def add_parameters(parameters: protocol_api.Parameters):
         choices=[
             {'display_name': '40 µL (one plate)', 'value': 1},
             {'display_name': '80 µL (two plates)', 'value': 2},
-            {'display_name': '120 µL (three plates - not compatible with 0.2 mL tubes)', 'value': 3},
-            {'display_name': '160 µL (four plates - not compatible with 0.2 mL tubes)', 'value': 4}
+            {'display_name': '120 µL (three plates - 1.5 mL tubes)', 'value': 3},
+            {'display_name': '160 µL (four plates - 1.5 mL tubes)', 'value': 4}
         ]
     )
 
