@@ -86,7 +86,7 @@ def run(protocol: protocol_api.ProtocolContext):
     #  and transfer an additional 40uL, then mix again).
     # Use multiplier >2 at your own risk.
     p = protocol.params.volume
-    param_tubes = protocol.params.tubes
+    param_tubes = protocol.params.tube
 
     # deck setup
     p300tips = protocol.load_labware('opentrons_96_filtertiprack_200ul', 3)
