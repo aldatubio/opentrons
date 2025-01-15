@@ -93,6 +93,7 @@ def run(protocol: protocol_api.ProtocolContext):
     tubes = protocol.load_labware(param_tubes, 2)
     # custom 5mL tube definition
     water = protocol.load_labware('usascientific_15_tuberack_5000ul', 1)
+    water_loc = 'A5'
 
     # pipette initialization
     p300 = protocol.load_instrument('p300_single_gen2', 'right', tip_racks=[p300tips])
@@ -138,6 +139,11 @@ def run(protocol: protocol_api.ProtocolContext):
         '#777'
     )
 
+    water_viz = protocol.define_liquid(
+        'dH2O',
+        '#00f'
+    )
+
     tubes.wells_by_name()[lower_conc_loc].load_liquid(lower_primer_viz, 250*p)
     tubes.wells_by_name()[higher_conc_loc].load_liquid(higher_primer_viz, 250*p)
     wells_to_plate_viz = sum(wells, []) #flatten list
@@ -147,6 +153,8 @@ def run(protocol: protocol_api.ProtocolContext):
             empty_viz,
             0
         )
+    water.wells_by_name()[water_loc].load_liquid(water_viz, 500*p)
+    
     ### **********************************
     
 
