@@ -172,9 +172,9 @@ def run(protocol: protocol_api.ProtocolContext):
     # row C tubes = 20 µL
     # row D tubes = 30 µL
     to_fill = []
-    for i in range(1,4):
+    for i in range(1,4): #rows B, C, D
         interior_list = []
-        interior_list = [wells[j][i] for j in range(1,4)] #get nested list of wells by column
+        interior_list = [wells[j][i] for j in range(4)] #[0][1] is B2, [1][1] is B3, [2][1] is B4, [3][1] is B5 --> [B2, B3, B4, B5]
         to_fill.append(interior_list)
     
     for i in range(3):              # 3 rows: B, C, D
@@ -226,7 +226,7 @@ def run(protocol: protocol_api.ProtocolContext):
     # where tubes B, C, and D in a column are all dilutions of tube A in the same column
 
     to_fill = []
-    wells_temp = wells
+    wells_temp = [x[:] for x in wells] #create deep copy of wells that we can modify, without changing original
     for i in range(4):
         wells_temp[i].pop(0)
         to_fill.append(wells_temp[i]) #to_fill is now a list of lists: [[B2, C2, D2], [B3, C3, D3],...]
