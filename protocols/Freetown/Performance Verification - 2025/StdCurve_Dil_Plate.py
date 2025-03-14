@@ -355,7 +355,7 @@ def run(protocol: protocol_api.ProtocolContext):
 
     for i in range(len(vols['rna'])):
         p300.distribute(
-            vol_per_well+excess_vol,
+            (vol_per_well+excess_vol)*num_plates,
             tubes.wells()[i],
             [plate.wells()[x] for x in wells[i]],
             disposal_volume = 10
@@ -368,7 +368,7 @@ def run(protocol: protocol_api.ProtocolContext):
             loc = diluent[dil_loc]
 
         p300.distribute(
-            vol_per_well+excess_vol,
+            (vol_per_well+excess_vol)*num_plates,
             loc,
             [plate.wells()[x] for x in [88, 89, 90, 91]],
             disposal_volume = 10
