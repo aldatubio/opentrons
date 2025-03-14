@@ -171,7 +171,7 @@ def get_wells():
 
 
 metadata = {
-    'apiLevel': '2.13',
+    'apiLevel': '2.22',
     'protocolName': 'Freetown | Standard Curve for Pre-LoD',
     'author': 'OP13 LL',
     'description': 'Prepares and plates a ten-point serial dilution series.'
@@ -181,7 +181,7 @@ requirements = {
     'robotType': 'OT-2'
 }
 
-'''
+
 def add_parameters(parameters: protocol_api.Parameters):
     
     parameters.add_str(
@@ -212,19 +212,16 @@ def add_parameters(parameters: protocol_api.Parameters):
         minimum = 1,
         maximum = 4
     )
-'''
+
 
 def run(protocol: protocol_api.ProtocolContext):
 
     protocol.home()
 
     # to use this protocol with simulator, get rid of protocol params temporarily
-    #num_plates = protocol.params.num_plates
-    #neg_handling = protocol.params.neg_handling
-    #robot = protocol.params.robot
-    robot = '7B10'
-    num_plates = 1
-    neg_handling = 'kit'
+    num_plates = protocol.params.num_plates
+    neg_handling = protocol.params.neg_handling
+    robot = protocol.params.robot
     
     vols = get_volumes(vol_per_well, copies_per_well, wells_per_dilution, num_plates=num_plates, excess_vol=excess_vol)
 
@@ -253,7 +250,7 @@ def run(protocol: protocol_api.ProtocolContext):
     ### Visualization of deck layout - API 2.14 and above only!
     ### To use protocol simulator, downgrade this protocol to 2.13 and comment out this section
     ###
-    '''
+    
     # ************************************
     def visualize_deck():
         diluent_viz = protocol.define_liquid(
@@ -304,7 +301,7 @@ def run(protocol: protocol_api.ProtocolContext):
 
     visualize_deck()
     # ************************************
-    '''   
+       
 
     ###
     ### 1. Transfer diluent
