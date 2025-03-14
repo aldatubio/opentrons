@@ -216,8 +216,6 @@ def add_parameters(parameters: protocol_api.Parameters):
 
 def run(protocol: protocol_api.ProtocolContext):
 
-    protocol.home()
-
     # to use this protocol with simulator, get rid of protocol params temporarily
     num_plates = protocol.params.num_plates
     neg_handling = protocol.params.neg_handling
