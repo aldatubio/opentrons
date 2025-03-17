@@ -2,7 +2,7 @@
 This protocol can be used to check whether a new labware definition is suitable. 
 '''
 
-new_labware_name = 'abs_usasci_96well_200ul'
+new_labware_name = 'abs_96well_100ul'
 
 ###########################################################################################
 
