@@ -235,7 +235,7 @@ def run(protocol: protocol_api.ProtocolContext):
 
     tubes = protocol.load_labware('opentrons_24_tuberack_eppendorf_1.5ml_safelock_snapcap', 4)
     diluent = protocol.load_labware('usascientific_15_tuberack_5000ul', 1)
-    plate = protocol.load_labware('abs_usasci_96well_200ul', 2)
+    plate = protocol.load_labware('abs_96well_100ul', 2)
 
     p300_tips = protocol.load_labware('opentrons_96_filtertiprack_200ul', 3)
     p300 = protocol.load_instrument('p300_single_gen2', 'right', tip_racks=[p300_tips])
