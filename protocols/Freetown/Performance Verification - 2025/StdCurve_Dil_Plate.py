@@ -181,45 +181,50 @@ requirements = {
     'robotType': 'OT-2'
 }
 
+if float(metadata['apiLevel']) >= 2.18:
+    def add_parameters(parameters: protocol_api.Parameters):
+        
+        parameters.add_str(
+            variable_name = "robot",
+            display_name = "Robot",
+            choices = [
+                {"display_name": "7B10", "value": "7B10"},
+                {"display_name": "8B04", "value": "8B04"}
+            ],
+            default = "7B10"
+        )
+        
+        parameters.add_str(
+            variable_name = "neg_handling",
+            display_name = "Negative control plating",
+            choices = [
+                {"display_name": "Manual", "value": "manual"},
+                {"display_name": "Auto - use kit negative", "value": "kit"},
+                {"display_name": "Auto - use diluent as negative", "value": "diluent"}
+            ],
+            default = "kit"
+        )
 
-def add_parameters(parameters: protocol_api.Parameters):
-    
-    parameters.add_str(
-        variable_name = "robot",
-        display_name = "Robot",
-        choices = [
-            {"display_name": "7B10", "value": "7B10"},
-            {"display_name": "8B04", "value": "8B04"}
-        ],
-        default = "7B10"
-    )
-    
-    parameters.add_str(
-        variable_name = "neg_handling",
-        display_name = "Negative control plating",
-        choices = [
-            {"display_name": "Manual", "value": "manual"},
-            {"display_name": "Auto - use kit negative", "value": "kit"},
-            {"display_name": "Auto - use diluent as negative", "value": "diluent"}
-        ],
-        default = "kit"
-    )
-
-    parameters.add_int(
-        variable_name = "num_plates",
-        display_name = "Number of plates to prepare",
-        default = 1,
-        minimum = 1,
-        maximum = 4
-    )
+        parameters.add_int(
+            variable_name = "num_plates",
+            display_name = "Number of plates to prepare",
+            default = 1,
+            minimum = 1,
+            maximum = 4
+        )
 
 
 def run(protocol: protocol_api.ProtocolContext):
 
     # to use this protocol with simulator, get rid of protocol params temporarily
-    num_plates = protocol.params.num_plates
-    neg_handling = protocol.params.neg_handling
-    robot = protocol.params.robot
+    if float(metadata['apiLevel']) >= 2.18:
+        num_plates = protocol.params.num_plates
+        neg_handling = protocol.params.neg_handling
+        robot = protocol.params.robot
+    else:
+        num_plates = 1
+        neg_handling = 'kit'
+        robot = '7B10'
     
     vols = get_volumes(vol_per_well, copies_per_well, wells_per_dilution, num_plates=num_plates, excess_vol=excess_vol)
 
@@ -246,10 +251,6 @@ def run(protocol: protocol_api.ProtocolContext):
 
     
     ### Visualization of deck layout - API 2.14 and above only!
-    ### To use protocol simulator, downgrade this protocol to 2.13 and comment out this section
-    ###
-    
-    # ************************************
     def visualize_deck():
         diluent_viz = protocol.define_liquid(
             'Diluent',
@@ -294,18 +295,18 @@ def run(protocol: protocol_api.ProtocolContext):
         if neg_handling == 'kit':
             tubes[neg_loc].load_liquid(
                 neg_viz,
-                vol_per_well * excess_vol + 20
+                4 * (vol_per_well + excess_vol) + 20
             )
-
-    visualize_deck()
-    # ************************************
+    
+    if float(metadata['apiLevel']) >= 2.14:
+        visualize_deck()
        
 
     ###
     ### 1. Transfer diluent
     ###
 
-    pipette, _, _ = choose_pipette(max(vols['dil']), p300_range, left_pipette_range)
+    pipette = choose_pipette(max(vols['dil']), p300_range, left_pipette_range)[0]
 
     pipette.pick_up_tip()
     pipette.transfer(
