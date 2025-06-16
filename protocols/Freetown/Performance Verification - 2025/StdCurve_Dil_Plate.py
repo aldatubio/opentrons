@@ -226,8 +226,12 @@ def run(protocol: protocol_api.ProtocolContext):
         neg_handling = 'kit'
         robot = '7B10'
     
-    vols = get_volumes(vol_per_well, copies_per_well, wells_per_dilution, num_plates=num_plates, excess_vol=excess_vol)
+    if num_plates == 1:
+        excess_vol = 0 #µL
+    else:
+        excess_vol = 5 #µL
 
+    vols = get_volumes(vol_per_well, copies_per_well, wells_per_dilution, num_plates=num_plates, excess_vol=excess_vol)
 
     ###
     ### Deck setup
